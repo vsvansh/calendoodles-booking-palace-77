@@ -1,4 +1,5 @@
 
+import { forwardRef, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,7 +17,8 @@ import {
   BarChart3,
   User,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  ChevronRight
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,9 +26,10 @@ interface SidebarProps {
   setIsOpen: (open: boolean) => void;
 }
 
-const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen }, ref) => {
   const isMobile = useIsMobile();
   const location = useLocation();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   
   const navigationItems = [
     { name: 'Dashboard', href: '/', icon: Home },
@@ -56,6 +59,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                   ${isActive 
                     ? 'bg-calendoodle-purple/20 text-calendoodle-purple dark:bg-calendoodle-purple/30 dark:text-white' 
                     : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-200 dark:hover:text-white'}`}
+                  onClick={() => isMobile && setIsOpen(false)}
                 >
                   <IconComponent className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300 ${isActive ? 'text-calendoodle-purple' : ''}`} aria-hidden="true" />
                   {(isOpen || isMobile) && <span className="truncate transition-all duration-300">{item.name}</span>}
@@ -75,29 +79,34 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-900 dark:border-gray-800">
         <ScrollArea className="h-full py-4 scrollbar-thin">
-          <div className="px-3 pb-16 pt-2">{renderNavItems()}</div>
+          <div className="px-3 pb-16 pt-2">
+            {renderNavItems()}
+          </div>
         </ScrollArea>
+        <SheetClose ref={closeButtonRef} className="sr-only">Close</SheetClose>
       </SheetContent>
     </Sheet>
   );
 
   const desktopView = () => (
     <div
-      className={`transition-all duration-300 fixed z-20 ${
+      ref={ref}
+      className={`fixed z-20 ${
         isOpen ? 'w-64' : 'w-16'
-      } left-0 inset-y-0 bg-white dark:bg-gray-900 border-r dark:border-gray-800 h-screen pt-16`}
+      } left-0 inset-y-0 bg-white dark:bg-gray-900 border-r dark:border-gray-800 h-screen pt-16 shadow-sm transition-all duration-300 ease-in-out`}
     >
       <div className="flex items-center justify-end px-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className="h-6 w-6 absolute right-2 top-[74px] dark:text-gray-200"
+          className="h-6 w-6 absolute -right-3 top-[74px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50"
+          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
           {isOpen ? (
-            <PanelLeftClose className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" />
           ) : (
-            <PanelLeftOpen className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 rotate-180" />
           )}
         </Button>
       </div>
@@ -114,6 +123,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-16'} transition-all duration-300`} />}
     </>
   );
-};
+});
+
+Sidebar.displayName = "Sidebar";
 
 export default Sidebar;

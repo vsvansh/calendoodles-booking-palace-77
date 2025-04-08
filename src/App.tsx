@@ -28,9 +28,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Auth Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Auth Routes with back buttons added via props */}
+          <Route path="/login" element={<Login showBackButton={true} />} />
+          <Route path="/register" element={<Register showBackButton={true} />} />
           
           {/* App Routes */}
           <Route element={<AppLayout />}>
