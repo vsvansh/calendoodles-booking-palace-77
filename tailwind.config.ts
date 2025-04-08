@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,6 +53,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				calendoodle: {
+				  blue: '#3498db',
+				  purple: '#9b59b6',
+				  orange: '#f39c12',
+				  green: '#2ecc71',
+				  red: '#e74c3c',
+				  cream: '#faf8f1',
+				  charcoal: '#2c3e50',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +94,31 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				bounce: {
+				  '0%, 100%': { transform: 'translateY(0)' },
+				  '50%': { transform: 'translateY(-5px)' }
+				},
+				wiggle: {
+				  '0%, 100%': { transform: 'rotate(-3deg)' },
+				  '50%': { transform: 'rotate(3deg)' }
+				},
+				'fade-in': {
+				  '0%': { opacity: '0' },
+				  '100%': { opacity: '1' }
+				},
+				'slide-up': {
+                  '0%': { transform: 'translateY(10px)', opacity: '0' },
+                  '100%': { transform: 'translateY(0)', opacity: '1' }
+                }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce': 'bounce 1s infinite',
+				'wiggle': 'wiggle 1s ease-in-out infinite',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'slide-up': 'slide-up 0.3s ease-out'
 			}
 		}
 	},
