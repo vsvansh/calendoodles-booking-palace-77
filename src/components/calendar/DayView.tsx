@@ -40,10 +40,10 @@ const DayView = ({ currentDate, events, onEventClick, onTimeSlotClick }: DayView
                 {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
               </div>
               <div
-                className="col-span-11 p-2 min-h-[80px] relative"
+                className="col-span-11 p-2 min-h-[80px] relative cursor-pointer"
                 onClick={() => {
                   const dateWithTime = new Date(currentDate);
-                  dateWithTime.setHours(hour);
+                  dateWithTime.setHours(hour, 0, 0, 0);
                   onTimeSlotClick(dateWithTime);
                 }}
               >
@@ -52,8 +52,8 @@ const DayView = ({ currentDate, events, onEventClick, onTimeSlotClick }: DayView
                 ) : (
                   hourEvents.map((event, index) => (
                     <div
-                      key={index}
-                      className="p-2 mb-1 rounded cursor-pointer"
+                      key={event.id}
+                      className="p-2 mb-1 rounded cursor-pointer transition-transform hover:translate-y-[-2px]"
                       style={{
                         backgroundColor: event.color + "33", // Adding transparency
                         borderLeft: `4px solid ${event.color}`,

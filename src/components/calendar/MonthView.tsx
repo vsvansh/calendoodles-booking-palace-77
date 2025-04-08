@@ -47,18 +47,32 @@ const MonthView = ({ currentDate, events, onEventClick }: MonthViewProps) => {
         {displayEvents.map((event) => (
           <div
             key={event.id}
-            className={`text-xs truncate mb-1 p-1 rounded cursor-pointer bg-${event.color}`}
-            style={{ backgroundColor: event.color + "33" }} // Adding transparency
+            className="text-xs truncate mb-1 p-1 rounded cursor-pointer transition-transform hover:translate-y-[-1px]"
+            style={{ 
+              backgroundColor: event.color + "33", // Adding transparency
+              borderLeft: `3px solid ${event.color}`
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onEventClick(event);
             }}
           >
-            {event.time} {event.title}
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: event.color }}></div>
+              <span>{event.time} {event.title}</span>
+            </div>
           </div>
         ))}
         {moreEventsCount > 0 && (
-          <div className="text-xs text-gray-500">+{moreEventsCount} more</div>
+          <div 
+            className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50 px-2 py-1 rounded text-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDateClick(date);
+            }}
+          >
+            +{moreEventsCount} more
+          </div>
         )}
       </>
     );
@@ -82,13 +96,13 @@ const MonthView = ({ currentDate, events, onEventClick }: MonthViewProps) => {
                     ${isToday ? "ring-2 ring-calendoodle-blue ring-inset" : ""}`}
         >
           <div
-            className={`h-full p-1 cursor-pointer hover:bg-calendoodle-blue/5 flex flex-col`}
+            className={`h-full p-1 cursor-pointer hover:bg-calendoodle-blue/5 dark:hover:bg-calendoodle-blue/5 flex flex-col`}
             onClick={() => handleDateClick(cloneDay)}
           >
             <div
               className={`text-right p-1 ${
                 !isCurrentMonth
-                  ? "text-gray-400"
+                  ? "text-gray-400 dark:text-gray-600"
                   : isToday
                   ? "text-calendoodle-blue font-bold"
                   : ""
@@ -114,9 +128,9 @@ const MonthView = ({ currentDate, events, onEventClick }: MonthViewProps) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 animate-slide-up">
-      <div className="grid grid-cols-7 text-center font-medium text-sm py-2 border-b dark:border-gray-700">
+      <div className="grid grid-cols-7 text-center font-medium text-sm py-2 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/60">
         {daysOfWeek.map((day) => (
-          <div key={day}>{day}</div>
+          <div key={day} className="py-2">{day}</div>
         ))}
       </div>
       <div className="mt-2">{dateRows}</div>

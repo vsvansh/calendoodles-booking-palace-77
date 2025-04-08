@@ -47,7 +47,7 @@ const WeekView = ({ currentDate, events, onEventClick }: WeekViewProps) => {
             className={`p-2 text-center border-r dark:border-gray-700 
             ${
               isSameDay(day, new Date())
-                ? "bg-calendoodle-blue/10"
+                ? "bg-calendoodle-blue/10 dark:bg-calendoodle-blue/5"
                 : "bg-gray-50 dark:bg-gray-900/60"
             }`}
           >
@@ -65,16 +65,19 @@ const WeekView = ({ currentDate, events, onEventClick }: WeekViewProps) => {
 
       <div className="overflow-y-auto" style={{ maxHeight: "70vh" }}>
         {hours.map((hour) => (
-          <div key={hour} className="grid grid-cols-8 border-b dark:border-gray-700">
-            <div className="p-1 text-center border-r dark:border-gray-700 text-sm">
+          <div key={hour} className="grid grid-cols-8 border-b dark:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
+            <div className="p-1 text-center border-r dark:border-gray-700 text-sm font-medium bg-gray-50/50 dark:bg-gray-900/30">
               {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
             </div>
             {days.map((day, dayIndex) => {
               const dayEvents = getEventsForDateAndHour(day, hour);
+              const isToday = isSameDay(day, new Date());
               return (
                 <div
                   key={dayIndex}
-                  className="border-r dark:border-gray-700 p-1 relative min-h-[60px]"
+                  className={`border-r dark:border-gray-700 p-1 relative min-h-[60px] cursor-pointer
+                    ${isToday ? "bg-calendoodle-blue/5" : ""}`
+                  }
                   onClick={() => {
                     const dateWithTime = new Date(day);
                     dateWithTime.setHours(hour);
@@ -84,7 +87,7 @@ const WeekView = ({ currentDate, events, onEventClick }: WeekViewProps) => {
                   {dayEvents.map((event, eventIndex) => (
                     <div
                       key={eventIndex}
-                      className="text-xs p-1 mb-1 rounded cursor-pointer truncate"
+                      className="text-xs p-1 mb-1 rounded cursor-pointer truncate transition-transform hover:translate-y-[-2px]"
                       style={{
                         backgroundColor: event.color + "33", // Adding transparency
                         borderLeft: `3px solid ${event.color}`,
@@ -94,7 +97,8 @@ const WeekView = ({ currentDate, events, onEventClick }: WeekViewProps) => {
                         onEventClick(event);
                       }}
                     >
-                      {event.time} - {event.title}
+                      <div className="font-medium truncate">{event.title}</div>
+                      <div className="text-gray-600 dark:text-gray-400 truncate">{event.time}</div>
                     </div>
                   ))}
                 </div>

@@ -7,4 +7,7 @@ export interface CalendarEvent {
   duration: number;
   status: "confirmed" | "pending" | "cancelled";
   color: string;
+  location?: string;
+  attendees?: number;
+  notes?: string;
 }

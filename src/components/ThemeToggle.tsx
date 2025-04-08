@@ -40,13 +40,21 @@ export function ThemeToggle() {
       variant="ghost" 
       size="icon" 
       onClick={toggleTheme} 
-      className="rounded-full transition-all duration-300"
+      className="rounded-full transition-all duration-300 relative"
     >
-      {isDarkMode ? (
-        <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue" />
-      ) : (
-        <Sun className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-orange" />
-      )}
+      <div className="relative">
+        {isDarkMode ? (
+          <>
+            <div className="absolute inset-0 bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow" />
+            <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-calendoodle-orange rounded-full opacity-20 animate-pulse-glow" />
+            <Sun className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-orange" />
+          </>
+        )}
+      </div>
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

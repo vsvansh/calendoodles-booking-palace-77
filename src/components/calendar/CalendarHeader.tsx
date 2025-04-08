@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { format, addMonths, subMonths } from "date-fns";
+import { format, addMonths, subMonths, addDays, subDays, isSameDay } from "date-fns";
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -17,6 +17,8 @@ const CalendarHeader = ({
   view,
   setView,
 }: CalendarHeaderProps) => {
+  const today = new Date();
+
   const goToPrevious = () => {
     if (view === "month") {
       setCurrentDate(subMonths(currentDate, 1));
@@ -73,23 +75,31 @@ const CalendarHeader = ({
     }
   };
 
+  const isTodaySelected = isSameDay(currentDate, today);
+
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
       <div className="flex items-center">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 group">
           {getHeaderText()}
+          <span className="block h-1 bg-calendoodle-blue scale-x-0 group-hover:scale-x-100 transition-transform duration-300 mt-1"></span>
         </h2>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 bg-white dark:bg-gray-800/50 p-2 rounded-xl shadow-sm">
         <Button
           variant="outline"
           size="sm"
           onClick={goToToday}
-          className="border-2 hover:bg-calendoodle-blue/10 hover:text-calendoodle-blue hover:border-calendoodle-blue/30"
+          disabled={isTodaySelected}
+          className={`border-2 transition-all duration-300 ${
+            isTodaySelected 
+              ? "bg-calendoodle-blue text-white border-calendoodle-blue" 
+              : "hover:bg-calendoodle-blue/10 hover:text-calendoodle-blue hover:border-calendoodle-blue/30"
+          }`}
         >
           Today
         </Button>
-        <div className="flex items-center rounded-md border">
+        <div className="flex items-center rounded-md border dark:border-gray-700">
           <Button
             variant="ghost"
             size="icon"
@@ -108,7 +118,7 @@ const CalendarHeader = ({
           </Button>
         </div>
         <Select value={view} onValueChange={(v: "month" | "week" | "day") => setView(v)}>
-          <SelectTrigger className="w-[110px]">
+          <SelectTrigger className="w-[110px] bg-white dark:bg-gray-800">
             <SelectValue placeholder="View" />
           </SelectTrigger>
           <SelectContent>

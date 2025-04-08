@@ -21,6 +21,9 @@ const mockEvents: CalendarEvent[] = [
     duration: 60,
     status: "confirmed",
     color: "#3498db",
+    location: "Conference Room A",
+    attendees: 4,
+    notes: "Quarterly strategy planning session with the executive team."
   },
   {
     id: "2",
@@ -30,6 +33,8 @@ const mockEvents: CalendarEvent[] = [
     duration: 30,
     status: "confirmed",
     color: "#e74c3c",
+    location: "Medical Center",
+    attendees: 1
   },
   {
     id: "3",
@@ -39,6 +44,9 @@ const mockEvents: CalendarEvent[] = [
     duration: 90,
     status: "pending",
     color: "#2ecc71",
+    location: "Downtown Bistro",
+    attendees: 6,
+    notes: "Monthly team lunch to discuss progress and celebrate achievements."
   },
   {
     id: "4",
@@ -48,6 +56,7 @@ const mockEvents: CalendarEvent[] = [
     duration: 45,
     status: "confirmed",
     color: "#9b59b6",
+    location: "Online Meeting"
   },
   {
     id: "5",
@@ -57,6 +66,7 @@ const mockEvents: CalendarEvent[] = [
     duration: 30,
     status: "cancelled",
     color: "#f39c12",
+    location: "Phone Conference"
   },
 ];
 
@@ -69,6 +79,7 @@ const Calendar = () => {
   const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -96,6 +107,29 @@ const Calendar = () => {
       title: "Event deleted",
       description: "Your event has been successfully deleted.",
     });
+  };
+
+  // This would be implemented in a real app
+  const handleEventDrop = (eventId: string, newDate: Date, newTime: string) => {
+    setEvents(prevEvents => 
+      prevEvents.map(event => {
+        if (event.id === eventId) {
+          const updatedEvent = {
+            ...event,
+            date: format(newDate, "yyyy-MM-dd"),
+            time: newTime
+          };
+          
+          toast({
+            title: "Event moved",
+            description: `${event.title} moved to ${format(newDate, "MMM d")} at ${newTime}`,
+          });
+          
+          return updatedEvent;
+        }
+        return event;
+      })
+    );
   };
 
   return (

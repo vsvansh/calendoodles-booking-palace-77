@@ -3,8 +3,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, parseISO } from "date-fns";
-import { Clock, Calendar, MapPin, Users, Video, AlertTriangle, Edit, Trash2, Check } from "lucide-react";
+import { Clock, Calendar, MapPin, Users, Video, AlertTriangle, Edit, Trash2, Check, Copy, X } from "lucide-react";
 import { CalendarEvent } from "@/types/calendar";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface EventDetailModalProps {
   isOpen: boolean;
@@ -14,14 +16,34 @@ interface EventDetailModalProps {
 }
 
 const EventDetailModal = ({ isOpen, onClose, event, onDelete }: EventDetailModalProps) => {
+  const { toast } = useToast();
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  
+  const handleCopyLink = () => {
+    // In a real app, this would be a shareable link
+    navigator.clipboard.writeText(`https://calendoodle.app/event/${event.id}`);
+    toast({
+      title: "Link copied",
+      description: "Event link copied to clipboard",
+    });
+  };
+
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
+    if (isConfirmingDelete) {
       onDelete(event.id);
+      setIsConfirmingDelete(false);
+    } else {
+      setIsConfirmingDelete(true);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        setIsConfirmingDelete(false);
+        onClose();
+      }
+    }}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
@@ -60,7 +82,7 @@ const EventDetailModal = ({ isOpen, onClose, event, onDelete }: EventDetailModal
             </div>
             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
               <MapPin className="h-5 w-5 text-calendoodle-orange" />
-              <span>Online Meeting</span>
+              <span>{event.location || "Online Meeting"}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
               <Video className="h-5 w-5 text-calendoodle-green" />
@@ -70,14 +92,19 @@ const EventDetailModal = ({ isOpen, onClose, event, onDelete }: EventDetailModal
             </div>
             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
               <Users className="h-5 w-5 text-calendoodle-blue" />
-              <span>2 Attendees</span>
+              <span>{event.attendees || 2} Attendees</span>
+            </div>
+            <div className="flex justify-end">
+              <Button variant="outline" size="sm" onClick={handleCopyLink} className="gap-1 text-gray-500">
+                <Copy className="h-3.5 w-3.5" /> Share
+              </Button>
             </div>
           </div>
 
           <div className="mt-6">
             <h3 className="font-medium text-gray-800 dark:text-gray-100">Description</h3>
             <p className="mt-2 text-gray-600 dark:text-gray-300">
-              {event.title} discussion and planning session. Please come prepared with your ideas and updates.
+              {event.notes || `${event.title} discussion and planning session. Please come prepared with your ideas and updates.`}
             </p>
           </div>
 
@@ -94,22 +121,45 @@ const EventDetailModal = ({ isOpen, onClose, event, onDelete }: EventDetailModal
             <div>
               <Button 
                 variant="outline" 
-                className="text-red-500 border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"
+                className={`${isConfirmingDelete 
+                  ? "bg-red-50 dark:bg-red-950 text-red-600 border-red-300 dark:border-red-800 hover:bg-red-100" 
+                  : "text-red-500 border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"}`}
                 onClick={handleDelete}
               >
-                <Trash2 className="h-4 w-4 mr-2" /> Delete
+                {isConfirmingDelete ? (
+                  <>
+                    <X className="h-4 w-4 mr-2" /> Cancel
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4 mr-2" /> Delete
+                  </>
+                )}
               </Button>
             </div>
             <div className="space-x-2">
-              <Button
-                variant="outline"
-                className="border-calendoodle-blue text-calendoodle-blue hover:bg-calendoodle-blue/10"
-              >
-                <Edit className="h-4 w-4 mr-2" /> Edit
-              </Button>
-              <Button className="calendoodle-btn calendoodle-btn-primary">
-                <Check className="h-4 w-4 mr-2" /> Confirm
-              </Button>
+              {!isConfirmingDelete ? (
+                <>
+                  <Button
+                    variant="outline"
+                    className="border-calendoodle-blue text-calendoodle-blue hover:bg-calendoodle-blue/10"
+                  >
+                    <Edit className="h-4 w-4 mr-2" /> Edit
+                  </Button>
+                  {event.status !== "confirmed" && (
+                    <Button className="calendoodle-btn calendoodle-btn-primary">
+                      <Check className="h-4 w-4 mr-2" /> Confirm
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button 
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                  onClick={() => onDelete(event.id)}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" /> Confirm Delete
+                </Button>
+              )}
             </div>
           </div>
         </div>

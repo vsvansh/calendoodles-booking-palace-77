@@ -110,6 +110,10 @@ export default {
 				'slide-up': {
                   '0%': { transform: 'translateY(10px)', opacity: '0' },
                   '100%': { transform: 'translateY(0)', opacity: '1' }
+                },
+                'pulse-glow': {
+                  '0%, 100%': { opacity: '0.8', filter: 'blur(8px)' },
+                  '50%': { opacity: '0.4', filter: 'blur(12px)' }
                 }
 			},
 			animation: {
@@ -118,8 +122,15 @@ export default {
 				'bounce': 'bounce 1s infinite',
 				'wiggle': 'wiggle 1s ease-in-out infinite',
 				'fade-in': 'fade-in 0.5s ease-out',
-				'slide-up': 'slide-up 0.3s ease-out'
-			}
+				'slide-up': 'slide-up 0.3s ease-out',
+				'pulse-glow': 'pulse-glow 3s ease-in-out infinite'
+			},
+            boxShadow: {
+              'glow-blue': '0 0 15px rgba(52,152,219,0.3)',
+              'glow-purple': '0 0 15px rgba(155,89,182,0.3)',
+              'glow-orange': '0 0 15px rgba(243,156,18,0.3)',
+              'glow-green': '0 0 15px rgba(46,204,113,0.3)'
+            }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
