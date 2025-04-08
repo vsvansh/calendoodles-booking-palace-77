@@ -46,10 +46,10 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <Link
             key={item.name}
             to={item.href}
-            className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg group transition-all hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple`}
+            className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg group transition-all hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-200 dark:hover:text-white`}
           >
-            <IconComponent className="mr-3 h-5 w-5 flex-shrink-0" aria-hidden="true" />
-            <span className="truncate">{item.name}</span>
+            <IconComponent className="mr-3 h-5 w-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
+            <span className="truncate transition-all duration-300">{item.name}</span>
           </Link>
         );
       })}
@@ -58,8 +58,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
   const mobileView = () => (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="left" className="w-64 p-0 border-r pt-16">
-        <ScrollArea className="h-full py-4">
+      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-900 dark:border-gray-800">
+        <ScrollArea className="h-full py-4 scrollbar-thin">
           <div className="px-3 pb-16 pt-2">{renderNavItems()}</div>
         </ScrollArea>
       </SheetContent>
@@ -70,14 +70,14 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     <div
       className={`transition-all duration-300 fixed z-20 ${
         isOpen ? 'w-64' : 'w-0'
-      } left-0 inset-y-0 bg-white dark:bg-gray-800 border-r h-screen pt-16`}
+      } left-0 inset-y-0 bg-white dark:bg-gray-900 border-r dark:border-gray-800 h-screen pt-16`}
     >
       <div className="flex items-center justify-end px-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className="h-6 w-6 absolute right-2 top-[74px]"
+          className="h-6 w-6 absolute right-2 top-[74px] dark:text-gray-200"
         >
           {isOpen ? (
             <PanelLeftClose className="h-4 w-4" />
@@ -88,7 +88,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       </div>
       
       {isOpen && (
-        <ScrollArea className="h-full py-4">
+        <ScrollArea className="h-full py-4 scrollbar-thin">
           <div className="px-3 pb-16 pt-2">{renderNavItems()}</div>
         </ScrollArea>
       )}
@@ -98,7 +98,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   return (
     <>
       {isMobile ? mobileView() : desktopView()}
-      {!isMobile && isOpen && <div className="w-64" />} {/* Spacer for content */}
+      {!isMobile && isOpen && <div className="w-64" />}
     </>
   );
 };

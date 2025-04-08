@@ -365,7 +365,12 @@ const Analytics = () => {
                         dataKey="value"
                         label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                       >
-                        {serviceData.map((entry, index) => (
+                        {[
+                          { name: 'Credit Card', value: 65, color: '#3498db' },
+                          { name: 'PayPal', value: 20, color: '#2ecc71' },
+                          { name: 'Cash', value: 10, color: '#f39c12' },
+                          { name: 'Other', value: 5, color: '#9b59b6' }
+                        ].map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
@@ -500,7 +505,7 @@ const Analytics = () => {
                       <div key={service.name}>
                         <div className="flex justify-between text-sm mb-1">
                           <span>{service.name}</span>
-                          <span>{4 + Math.random().toFixed(1)}/5</span>
+                          <span>{4 + Math.random()}/5</span>
                         </div>
                         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 

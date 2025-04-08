@@ -91,17 +91,25 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
   
   ::selection {
     @apply bg-calendoodle-blue/30 dark:bg-calendoodle-blue/50;
   }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-gray-800/50;
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 hover:bg-gray-500;
+  }
 }
 
 @layer components {
   .calendoodle-card {
-    @apply bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/10 hover:shadow-xl transition-all duration-300 backdrop-blur-sm;
+    @apply bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/10 hover:shadow-xl transition-all duration-300 backdrop-blur-sm dark:backdrop-blur-md;
   }
   
   .calendoodle-btn {
@@ -129,7 +137,7 @@
   }
 
   .card-gradient {
-    @apply bg-gradient-to-br from-background to-card/80 backdrop-blur-sm dark:from-gray-800 dark:to-gray-900;
+    @apply bg-gradient-to-br from-background to-card/80 backdrop-blur-sm dark:from-gray-800/80 dark:to-gray-900/90 dark:backdrop-blur-sm;
   }
 
   .glow-card {
@@ -158,6 +166,44 @@
   
   .dark .glass-effect {
     @apply backdrop-blur-lg bg-gray-900/30 border border-gray-700/50;
+  }
+
+  /* Enhanced Dropdowns in Dark Mode */
+  .dark [data-radix-popper-content-wrapper] {
+    @apply !bg-transparent;
+  }
+  
+  .dark .dropdown-content,
+  .dark [role="menu"],
+  .dark [role="listbox"] {
+    @apply bg-gray-800 border border-gray-700 shadow-lg shadow-black/30 backdrop-blur-lg;
+  }
+  
+  /* Enhanced Buttons in Dark Mode */
+  .dark button {
+    @apply transition-shadow;
+  }
+  
+  .dark .primary-button-gradient {
+    @apply bg-gradient-to-r from-calendoodle-blue to-calendoodle-purple;
+  }
+  
+  /* Scrollbars */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 hover:bg-gray-400 rounded-full;
   }
 }
 
@@ -205,7 +251,8 @@
 
 /* Dark mode specific styles */
 .dark .calendoodle-card {
-  background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+  background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .dark .hero-gradient {
@@ -236,4 +283,36 @@
 .dark .glass-effect {
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Dark Mode Elements */
+.dark .neo-blur {
+  @apply backdrop-blur-xl bg-black/40 border border-white/10;
+}
+
+.dark .glass-panel {
+  @apply bg-gray-900/40 backdrop-blur-lg border border-gray-700/40 shadow-xl;
+}
+
+.dark .frosted-panel {
+  background: rgba(17, 25, 40, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+}
+
+.dark .text-glow {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.dark .blue-glow {
+  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
+}
+
+.dark .purple-glow {
+  filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.6));
+}
+
+.dark .orange-glow {
+  filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.6));
 }

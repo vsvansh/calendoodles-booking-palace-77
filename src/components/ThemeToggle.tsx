@@ -44,15 +44,20 @@ export function ThemeToggle() {
       <div className="relative z-10">
         {isDarkMode ? (
           <div className="relative">
-            <div className="absolute inset-0 bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-calendoodle-blue/30 dark:bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow"></div>
             <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
               <Stars className="h-3 w-3 absolute text-white opacity-70 animate-ping" style={{ top: '15%', left: '20%' }} />
+              <Stars className="h-2 w-2 absolute text-white opacity-50 animate-ping" style={{ top: '40%', right: '25%', animationDelay: '0.5s' }} />
             </div>
-            <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue" />
+            <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue dark:text-white" />
           </div>
         ) : (
           <div className="relative">
-            <div className="absolute inset-0 bg-calendoodle-orange rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-calendoodle-orange/40 rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute top-0 left-0 w-full h-full">
+              <div className="absolute h-1.5 w-1.5 bg-yellow-200 rounded-full opacity-70 animate-ping" style={{ top: '15%', right: '25%' }}></div>
+              <div className="absolute h-1 w-1 bg-yellow-200 rounded-full opacity-50 animate-ping" style={{ bottom: '20%', left: '25%', animationDelay: '0.7s' }}></div>
+            </div>
             <Sun className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-orange" />
           </div>
         )}
