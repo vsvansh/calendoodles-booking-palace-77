@@ -119,8 +119,9 @@ const Appointments = () => {
     clientName: '',
     clientEmail: '',
   });
+  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
 
-  const filteredAppointments = mockAppointments.filter((appointment) => {
+  const filteredAppointments = appointments.filter((appointment) => {
     const matchesSearch =
       searchQuery === "" ||
       appointment.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -156,9 +157,10 @@ const Appointments = () => {
   };
 
   const handleDeleteAppointment = (id: string) => {
+    setAppointments(prevAppointments => prevAppointments.filter(appointment => appointment.id !== id));
     toast({
       title: "Appointment deleted",
-      description: `Appointment #${id} has been deleted.`,
+      description: `Appointment has been successfully deleted.`,
     });
     setIsModalOpen(false);
   };
@@ -178,6 +180,9 @@ const Appointments = () => {
   };
   
   const handleRemoveSelected = () => {
+    setAppointments(prevAppointments => 
+      prevAppointments.filter(appointment => !selectedItems.includes(appointment.id))
+    );
     toast({
       title: "Appointments removed",
       description: `${selectedItems.length} appointments have been removed.`,
@@ -202,18 +207,43 @@ const Appointments = () => {
   };
   
   const handleCreateAppointment = () => {
-    toast({
-      title: "Appointment created",
-      description: `New appointment "${newAppointment.title}" has been created.`,
-    });
-    setIsNewAppointmentModalOpen(false);
-    setNewAppointment({
-      title: '',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      time: '10:00',
-      clientName: '',
-      clientEmail: '',
-    });
+    if (newAppointment.title.trim() && newAppointment.clientName.trim() && newAppointment.clientEmail.trim()) {
+      const newId = String(Date.now());
+      const appointment: Appointment = {
+        id: newId,
+        title: newAppointment.title,
+        date: newAppointment.date,
+        time: newAppointment.time,
+        duration: 60,
+        status: "pending",
+        color: "#3498db",
+        client: {
+          name: newAppointment.clientName,
+          email: newAppointment.clientEmail,
+        },
+      };
+      
+      setAppointments([...appointments, appointment]);
+      
+      toast({
+        title: "Appointment created",
+        description: `New appointment "${newAppointment.title}" has been created.`,
+      });
+      
+      setIsNewAppointmentModalOpen(false);
+      setNewAppointment({
+        title: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        time: '10:00',
+        clientName: '',
+        clientEmail: '',
+      });
+    } else {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields.",
+      });
+    }
   };
 
   return (
@@ -262,7 +292,7 @@ const Appointments = () => {
           </div>
           
           {selectedItems.length > 0 && (
-            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/40 p-2 rounded-md mb-4">
+            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/40 p-2 rounded-md mb-4 transition-all">
               <div className="text-sm">
                 {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"} selected
               </div>
@@ -270,7 +300,7 @@ const Appointments = () => {
                 <Button variant="outline" size="sm" onClick={handleSelectAll}>
                   {selectedItems.length === filteredAppointments.length ? "Deselect All" : "Select All"}
                 </Button>
-                <Button variant="outline" size="sm" className="text-red-500" onClick={handleRemoveSelected}>
+                <Button variant="outline" size="sm" className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30" onClick={handleRemoveSelected}>
                   <Trash2 className="h-4 w-4 mr-1" /> Remove Selected
                 </Button>
               </div>
@@ -404,6 +434,10 @@ const Appointments = () => {
                                     variant="ghost"
                                     size="sm"
                                     className="h-8 w-8 p-0"
+                                    onClick={() => toast({
+                                      title: "Meeting link",
+                                      description: "Video meeting link copied to clipboard",
+                                    })}
                                   >
                                     <Video className="h-4 w-4 text-calendoodle-blue" />
                                     <span className="sr-only">Join Meeting</span>

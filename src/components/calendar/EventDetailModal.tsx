@@ -93,7 +93,7 @@ const EventDetailModal = ({
         onClose();
       }
     }}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] my-4 overflow-hidden">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] my-8 overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <div

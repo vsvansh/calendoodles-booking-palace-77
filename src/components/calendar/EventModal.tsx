@@ -18,7 +18,7 @@ interface EventModalProps {
 const EventModal = ({ isOpen, onClose, date, events, onEventClick }: EventModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] my-4">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] my-8 overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-calendoodle-purple" />
@@ -41,7 +41,7 @@ const EventModal = ({ isOpen, onClose, date, events, onEventClick }: EventModalP
               Create New
             </Button>
           </div>
-          <ScrollArea className="max-h-[50vh]">
+          <ScrollArea className="max-h-[50vh] pr-2">
             <div className="space-y-4">
               {events.length > 0 ? (
                 events.map((event) => (

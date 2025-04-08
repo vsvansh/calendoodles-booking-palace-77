@@ -51,7 +51,7 @@ const AppLayout = () => {
         </div>
         
         <main 
-          className={`flex-grow z-1 transition-all duration-300 ease-in-out ${
+          className={`flex-grow z-1 transition-all duration-300 ease-in-out pb-16 ${
             showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-16'
           }`}
         >
