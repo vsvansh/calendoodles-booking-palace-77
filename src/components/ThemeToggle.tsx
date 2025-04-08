@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Stars } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
@@ -40,19 +40,22 @@ export function ThemeToggle() {
       variant="ghost" 
       size="icon" 
       onClick={toggleTheme} 
-      className="rounded-full transition-all duration-300 relative"
+      className="rounded-full transition-all duration-500 relative overflow-hidden"
     >
-      <div className="relative">
+      <div className="relative z-10">
         {isDarkMode ? (
-          <>
-            <div className="absolute inset-0 bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+              <Stars className="h-3 w-3 absolute text-white opacity-70 animate-ping" style={{ top: '15%', left: '20%' }} />
+            </div>
             <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue" />
-          </>
+          </div>
         ) : (
-          <>
-            <div className="absolute inset-0 bg-calendoodle-orange rounded-full opacity-20 animate-pulse-glow" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-calendoodle-orange rounded-full opacity-20 animate-pulse-glow"></div>
             <Sun className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-orange" />
-          </>
+          </div>
         )}
       </div>
       <span className="sr-only">Toggle theme</span>

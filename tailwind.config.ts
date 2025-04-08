@@ -114,6 +114,14 @@ export default {
                 'pulse-glow': {
                   '0%, 100%': { opacity: '0.8', filter: 'blur(8px)' },
                   '50%': { opacity: '0.4', filter: 'blur(12px)' }
+                },
+                'spin-slow': {
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(360deg)' }
+                },
+                'ping': {
+                  '75%, 100%': { transform: 'scale(2)', opacity: '0' },
+                  '0%': { transform: 'scale(1)', opacity: '0.5' }
                 }
 			},
 			animation: {
@@ -123,13 +131,19 @@ export default {
 				'wiggle': 'wiggle 1s ease-in-out infinite',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'slide-up': 'slide-up 0.3s ease-out',
-				'pulse-glow': 'pulse-glow 3s ease-in-out infinite'
+				'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+                'spin-slow': 'spin-slow 3s linear infinite',
+                'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
 			},
             boxShadow: {
               'glow-blue': '0 0 15px rgba(52,152,219,0.3)',
               'glow-purple': '0 0 15px rgba(155,89,182,0.3)',
               'glow-orange': '0 0 15px rgba(243,156,18,0.3)',
               'glow-green': '0 0 15px rgba(46,204,113,0.3)'
+            },
+            backdropFilter: {
+              'none': 'none',
+              'blur': 'blur(20px)'
             }
 		}
 	},

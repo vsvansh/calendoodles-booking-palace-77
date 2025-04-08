@@ -46,10 +46,10 @@
   }
 
   .dark {
-    --background: 210 29% 12%;
+    --background: 212 30% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 210 29% 16%;
+    --card: 212 30% 12%;
     --card-foreground: 0 0% 98%;
 
     --popover: 222 25% 14%;
@@ -67,20 +67,20 @@
     --muted: 210 30% 20%;
     --muted-foreground: 210 20% 65%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 210 30% 25%;
-    --input: 210 30% 25%;
+    --border: 212 30% 18%;
+    --input: 212 30% 20%;
     --ring: 204 70% 53%;
 
-    --sidebar-background: 212 30% 12%;
+    --sidebar-background: 212 30% 10%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 224 76% 48%;
+    --sidebar-primary: 204 70% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent: 212 28% 16%;
     --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 240 4% 16%;
+    --sidebar-border: 212 28% 16%;
     --sidebar-ring: 217 91% 60%;
   }
 }
@@ -124,19 +124,69 @@
     @apply hover:text-calendoodle-blue transition-colors duration-200;
   }
 
+  .card-gradient {
+    @apply bg-gradient-to-br from-background to-card/80 backdrop-blur-sm dark:from-gray-800 dark:to-gray-900;
+  }
+
+  .glow-card {
+    @apply dark:shadow-[0_0_15px_rgba(52,152,219,0.15)];
+  }
+
   .dark .shadow-glow-blue {
-    @apply shadow-[0_0_15px_rgba(52,152,219,0.3)];
+    @apply shadow-[0_0_20px_rgba(52,152,219,0.35)];
   }
   
   .dark .shadow-glow-purple {
-    @apply shadow-[0_0_15px_rgba(155,89,182,0.3)];
+    @apply shadow-[0_0_20px_rgba(155,89,182,0.35)];
   }
   
   .dark .shadow-glow-orange {
-    @apply shadow-[0_0_15px_rgba(243,156,18,0.3)];
+    @apply shadow-[0_0_20px_rgba(243,156,18,0.35)];
   }
   
   .dark .shadow-glow-green {
-    @apply shadow-[0_0_15px_rgba(46,204,113,0.3)];
+    @apply shadow-[0_0_20px_rgba(46,204,113,0.35)];
+  }
+}
+
+/* Animations */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

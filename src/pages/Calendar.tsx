@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { format } from "date-fns"; // Add this import
 import CalendarHeader from "@/components/calendar/CalendarHeader";
 import MonthView from "@/components/calendar/MonthView";
 import WeekView from "@/components/calendar/WeekView";
@@ -109,7 +110,19 @@ const Calendar = () => {
     });
   };
 
-  // This would be implemented in a real app
+  const handleEditEvent = (updatedEvent: CalendarEvent) => {
+    setEvents(prevEvents => 
+      prevEvents.map(event => 
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    );
+    setIsEventDetailModalOpen(false);
+    toast({
+      title: "Event updated",
+      description: "Your event has been successfully updated.",
+    });
+  };
+
   const handleEventDrop = (eventId: string, newDate: Date, newTime: string) => {
     setEvents(prevEvents => 
       prevEvents.map(event => {
@@ -187,6 +200,7 @@ const Calendar = () => {
           onClose={() => setIsEventDetailModalOpen(false)}
           event={selectedEvent}
           onDelete={handleDeleteEvent}
+          onEdit={handleEditEvent}
         />
       )}
 
