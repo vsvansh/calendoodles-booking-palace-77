@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { format, parseISO } from "date-fns";
-import { Calendar as CalendarIcon, Clock, ExternalLink, Plus, Search, User, Video } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, ExternalLink, Plus, Search, User, Video, Check, Trash2, Download } from "lucide-react";
 import EventDetailModal from "@/components/calendar/EventDetailModal";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
 interface Appointment {
@@ -107,6 +110,15 @@ const Appointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timeRange, setTimeRange] = useState("all");
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isNewAppointmentModalOpen, setIsNewAppointmentModalOpen] = useState(false);
+  const [newAppointment, setNewAppointment] = useState({
+    title: '',
+    date: format(new Date(), 'yyyy-MM-dd'),
+    time: '10:00',
+    clientName: '',
+    clientEmail: '',
+  });
 
   const filteredAppointments = mockAppointments.filter((appointment) => {
     const matchesSearch =
@@ -150,6 +162,59 @@ const Appointments = () => {
     });
     setIsModalOpen(false);
   };
+  
+  const handleSelectItem = (id: string) => {
+    setSelectedItems(prev => 
+      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+    );
+  };
+  
+  const handleSelectAll = () => {
+    if (selectedItems.length === filteredAppointments.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(filteredAppointments.map(appointment => appointment.id));
+    }
+  };
+  
+  const handleRemoveSelected = () => {
+    toast({
+      title: "Appointments removed",
+      description: `${selectedItems.length} appointments have been removed.`,
+    });
+    setSelectedItems([]);
+  };
+  
+  const handleDownloadInvoice = (id: string) => {
+    // In a real app, we would generate a PDF here
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent('Invoice for appointment #' + id));
+    element.setAttribute('download', `invoice-${id}.pdf`);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    
+    toast({
+      title: "Invoice downloaded",
+      description: `Invoice for appointment #${id} has been downloaded.`,
+    });
+  };
+  
+  const handleCreateAppointment = () => {
+    toast({
+      title: "Appointment created",
+      description: `New appointment "${newAppointment.title}" has been created.`,
+    });
+    setIsNewAppointmentModalOpen(false);
+    setNewAppointment({
+      title: '',
+      date: format(new Date(), 'yyyy-MM-dd'),
+      time: '10:00',
+      clientName: '',
+      clientEmail: '',
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -158,7 +223,10 @@ const Appointments = () => {
           <h1 className="text-3xl font-bold">Appointments</h1>
           <p className="text-gray-500 mt-1">Manage and track your appointments</p>
         </div>
-        <Button className="calendoodle-btn calendoodle-btn-primary">
+        <Button 
+          className="calendoodle-btn calendoodle-btn-primary"
+          onClick={() => setIsNewAppointmentModalOpen(true)}
+        >
           <Plus className="h-4 w-4 mr-2" />
           New Appointment
         </Button>
@@ -170,7 +238,7 @@ const Appointments = () => {
           <CardDescription>View and manage all your scheduled appointments</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
@@ -192,6 +260,22 @@ const Appointments = () => {
               </SelectContent>
             </Select>
           </div>
+          
+          {selectedItems.length > 0 && (
+            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/40 p-2 rounded-md mb-4">
+              <div className="text-sm">
+                {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"} selected
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={handleSelectAll}>
+                  {selectedItems.length === filteredAppointments.length ? "Deselect All" : "Select All"}
+                </Button>
+                <Button variant="outline" size="sm" className="text-red-500" onClick={handleRemoveSelected}>
+                  <Trash2 className="h-4 w-4 mr-1" /> Remove Selected
+                </Button>
+              </div>
+            </div>
+          )}
 
           <Tabs
             value={activeTab}
@@ -212,6 +296,13 @@ const Appointments = () => {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 dark:bg-gray-800/50">
+                        <th className="py-3 px-2 text-left">
+                          <Checkbox 
+                            checked={selectedItems.length === filteredAppointments.length && filteredAppointments.length > 0}
+                            onCheckedChange={handleSelectAll}
+                            className="data-[state=checked]:bg-calendoodle-purple"
+                          />
+                        </th>
                         <th className="py-3 px-4 text-left font-medium text-gray-500">
                           Appointment
                         </th>
@@ -234,8 +325,17 @@ const Appointments = () => {
                         filteredAppointments.map((appointment) => (
                           <tr
                             key={appointment.id}
-                            className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30"
+                            className={`border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 ${
+                              selectedItems.includes(appointment.id) ? 'bg-gray-50 dark:bg-gray-800/40' : ''
+                            }`}
                           >
+                            <td className="py-3 px-2">
+                              <Checkbox 
+                                checked={selectedItems.includes(appointment.id)} 
+                                onCheckedChange={() => handleSelectItem(appointment.id)}
+                                className="data-[state=checked]:bg-calendoodle-purple"
+                              />
+                            </td>
                             <td className="py-3 px-4">
                               <div className="flex items-center gap-2">
                                 <div
@@ -318,13 +418,22 @@ const Appointments = () => {
                                   <ExternalLink className="h-4 w-4 text-gray-500" />
                                   <span className="sr-only">View Details</span>
                                 </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0"
+                                  onClick={() => handleDownloadInvoice(appointment.id)}
+                                >
+                                  <Download className="h-4 w-4 text-gray-500" />
+                                  <span className="sr-only">Download Invoice</span>
+                                </Button>
                               </div>
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={5} className="py-8 text-center text-gray-500">
+                          <td colSpan={6} className="py-8 text-center text-gray-500">
                             No appointments found. Try adjusting your filters.
                           </td>
                         </tr>
@@ -354,6 +463,71 @@ const Appointments = () => {
           onDelete={handleDeleteAppointment}
         />
       )}
+
+      <Dialog open={isNewAppointmentModalOpen} onOpenChange={setIsNewAppointmentModalOpen}>
+        <DialogContent className="sm:max-w-[500px] my-8">
+          <DialogHeader>
+            <DialogTitle>Create New Appointment</DialogTitle>
+            <DialogDescription>
+              Enter the appointment details below.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Appointment Title</Label>
+              <Input
+                id="title"
+                value={newAppointment.title}
+                onChange={(e) => setNewAppointment({...newAppointment, title: e.target.value})}
+                placeholder="Enter appointment title"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="date">Date</Label>
+                <Input
+                  id="date"
+                  type="date"
+                  value={newAppointment.date}
+                  onChange={(e) => setNewAppointment({...newAppointment, date: e.target.value})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="time">Time</Label>
+                <Input
+                  id="time"
+                  type="time"
+                  value={newAppointment.time}
+                  onChange={(e) => setNewAppointment({...newAppointment, time: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="clientName">Client Name</Label>
+              <Input
+                id="clientName"
+                value={newAppointment.clientName}
+                onChange={(e) => setNewAppointment({...newAppointment, clientName: e.target.value})}
+                placeholder="Enter client name"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="clientEmail">Client Email</Label>
+              <Input
+                id="clientEmail"
+                type="email"
+                value={newAppointment.clientEmail}
+                onChange={(e) => setNewAppointment({...newAppointment, clientEmail: e.target.value})}
+                placeholder="Enter client email"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNewAppointmentModalOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateAppointment}>Create Appointment</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

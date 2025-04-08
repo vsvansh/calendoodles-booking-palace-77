@@ -45,20 +45,22 @@ const AppLayout = () => {
       
       <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} />
       
-      <div ref={sidebarRef}>
-        <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
-      </div>
-      
-      <main 
-        className={`pt-16 flex-grow z-1 transition-all duration-300 ease-in-out ${
-          showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-16'
-        }`}
-      >
-        <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)]">
-          <Outlet />
+      <div className="flex flex-grow pt-16">
+        <div ref={sidebarRef} className="z-10">
+          <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
         </div>
-        <Footer />
-      </main>
+        
+        <main 
+          className={`flex-grow z-1 transition-all duration-300 ease-in-out ${
+            showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-16'
+          }`}
+        >
+          <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)]">
+            <Outlet />
+          </div>
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 };

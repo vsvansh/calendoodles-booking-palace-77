@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
 import MonthView from "@/components/calendar/MonthView";
 import WeekView from "@/components/calendar/WeekView";
@@ -11,7 +13,7 @@ import DayView from "@/components/calendar/DayView";
 import EventDetailModal from "@/components/calendar/EventDetailModal";
 import CreateEventModal from "@/components/calendar/CreateEventModal";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CalendarEvent } from "@/types/calendar";
 
@@ -82,6 +84,8 @@ const Calendar = () => {
   const [isEventDetailModalOpen, setIsEventDetailModalOpen] = useState(false);
   const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
   const [isQuickEventModalOpen, setIsQuickEventModalOpen] = useState(false);
+  const [isJumpToDateOpen, setIsJumpToDateOpen] = useState(false);
+  const [jumpToDate, setJumpToDate] = useState<Date>(new Date());
   const [quickEvent, setQuickEvent] = useState({ title: '', date: format(new Date(), 'yyyy-MM-dd') });
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
@@ -171,11 +175,49 @@ const Calendar = () => {
     );
   };
 
+  const handleJumpToDate = () => {
+    setCurrentDate(jumpToDate);
+    setIsJumpToDateOpen(false);
+    toast({
+      title: "Date changed",
+      description: `Calendar view changed to ${format(jumpToDate, "MMMM d, yyyy")}`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Calendar</h1>
         <div className="flex gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="outline"
+                className="border-calendoodle-blue/50 text-calendoodle-blue hover:bg-calendoodle-blue/10 dark:border-calendoodle-blue/30 dark:hover:bg-calendoodle-blue/20"
+              >
+                <CalendarIcon className="h-4 w-4 mr-2" /> Jump to Date
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <CalendarPicker
+                mode="single"
+                selected={jumpToDate}
+                onSelect={(date) => {
+                  if (date) {
+                    setJumpToDate(date);
+                    setCurrentDate(date);
+                    toast({
+                      title: "Date changed",
+                      description: `Calendar view changed to ${format(date, "MMMM d, yyyy")}`,
+                    });
+                  }
+                }}
+                initialFocus
+                className="p-3 pointer-events-auto"
+              />
+            </PopoverContent>
+          </Popover>
+          
           <Button 
             onClick={() => setIsQuickEventModalOpen(true)}
             variant="outline"
@@ -247,7 +289,7 @@ const Calendar = () => {
       />
       
       <Dialog open={isQuickEventModalOpen} onOpenChange={setIsQuickEventModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] my-8">
           <DialogHeader>
             <DialogTitle>Quick Add Event</DialogTitle>
             <DialogDescription>

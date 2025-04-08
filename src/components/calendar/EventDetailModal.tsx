@@ -93,7 +93,7 @@ const EventDetailModal = ({
         onClose();
       }
     }}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] my-4 overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <div
@@ -112,7 +112,7 @@ const EventDetailModal = ({
             )}
           </DialogTitle>
         </DialogHeader>
-        <div className="py-4">
+        <div className="py-4 overflow-y-auto max-h-[calc(80vh-100px)]">
           <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">

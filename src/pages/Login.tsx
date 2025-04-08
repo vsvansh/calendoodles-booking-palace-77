@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Calendar } from "lucide-react";
+import { Calendar, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface LoginProps {
@@ -32,11 +32,9 @@ const Login = ({ showBackButton = false }: LoginProps) => {
       <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
       <div className="w-full max-w-md">
-        {showBackButton && (
-          <Link to="/" className="block mb-4 text-calendoodle-blue hover:underline">
-            ← Back to Home
-          </Link>
-        )}
+        <Link to="/" className="block mb-4 text-calendoodle-blue hover:underline flex items-center">
+          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Home
+        </Link>
         
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 group">
