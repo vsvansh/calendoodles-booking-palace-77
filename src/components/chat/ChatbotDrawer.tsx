@@ -2,11 +2,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Send, Sparkles, ChevronDown, Bot } from "lucide-react";
+import { MessageSquare, Send, Sparkles, ChevronDown, Bot, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useOnClickOutside } from "@/hooks/use-click-outside";
 
 interface Message {
   id: string;
@@ -42,12 +43,31 @@ export function ChatbotDrawer() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
+  
+  // Close the chat drawer when clicking outside
+  useOnClickOutside(chatRef, () => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  });
   
   // Scroll to bottom of messages when new message is added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Auto-resize textarea based on content
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = `${Math.min(scrollHeight, 120)}px`;
+    }
+  }, [inputValue]);
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
@@ -62,6 +82,11 @@ export function ChatbotDrawer() {
     
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
+    
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
     
     // Simulate bot thinking
     setIsTyping(true);
@@ -89,6 +114,13 @@ export function ChatbotDrawer() {
       }
     }, 1500);
   };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
     <>
@@ -103,12 +135,20 @@ export function ChatbotDrawer() {
       )}
       
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent className="w-[90vw] sm:max-w-[400px] h-[600px] p-0 flex flex-col">
-          <SheetHeader className="p-4 border-b">
+        <SheetContent ref={chatRef} className="w-[90vw] sm:max-w-[400px] h-[600px] p-0 flex flex-col">
+          <SheetHeader className="p-4 border-b flex flex-row justify-between items-center">
             <SheetTitle className="flex items-center gap-2 text-calendoodle-purple">
               <Bot className="h-5 w-5" />
               <span>Calendoodle Assistant</span>
             </SheetTitle>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8"
+              onClick={() => setIsOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </SheetHeader>
           
           <ScrollArea className="flex-1 p-4">
@@ -140,7 +180,7 @@ export function ChatbotDrawer() {
                         </span>
                       </div>
                     )}
-                    <p>{message.content}</p>
+                    <p className="whitespace-pre-wrap">{message.content}</p>
                     <div
                       className={`text-xs mt-1 ${
                         message.sender === "user"
@@ -159,6 +199,17 @@ export function ChatbotDrawer() {
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage src="/placeholder.svg" />
+                        <AvatarFallback className="bg-calendoodle-blue text-white text-xs">
+                          <Sparkles className="h-3 w-3" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-xs font-medium text-calendoodle-purple dark:text-calendoodle-blue">
+                        Calendoodle Assistant
+                      </span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce"></div>
                       <div
@@ -183,22 +234,27 @@ export function ChatbotDrawer() {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="flex items-center gap-2"
+              className="flex items-end gap-2"
             >
-              <Input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Type a message..."
-                className="flex-1 calendoodle-input"
-              />
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!inputValue.trim()}
-                className="bg-calendoodle-purple hover:bg-calendoodle-purple/90 text-white"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
+              <div className="flex-1 relative">
+                <Textarea
+                  ref={textareaRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type a message..."
+                  className="calendoodle-input min-h-[40px] max-h-[120px] pr-10 py-2"
+                  rows={1}
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={!inputValue.trim()}
+                  className="absolute right-2 bottom-2 h-6 w-6 bg-calendoodle-purple hover:bg-calendoodle-purple/90 text-white rounded-full p-1"
+                >
+                  <Send className="h-3 w-3" />
+                </Button>
+              </div>
             </form>
           </div>
         </SheetContent>

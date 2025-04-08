@@ -10,7 +10,10 @@ import Calendar from "./pages/Calendar";
 import Appointments from "./pages/Appointments";
 import Services from "./pages/Services";
 import Clients from "./pages/Clients";
+import Payments from "./pages/Payments";
 import Analytics from "./pages/Analytics";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -36,9 +39,10 @@ const App = () => (
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/services" element={<Services />} />
             <Route path="/clients" element={<Clients />} />
+            <Route path="/payments" element={<Payments />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/profile" element={<Navigate to="/" />} />
-            <Route path="/settings" element={<Navigate to="/" />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
           
           {/* Catch-all Route */}

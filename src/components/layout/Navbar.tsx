@@ -4,24 +4,87 @@ import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, Calendar, Menu, LogOut, User, Settings } from "lucide-react";
+import {
+  Bell,
+  Calendar,
+  Menu,
+  LogOut,
+  User,
+  Settings,
+  Check,
+  Info,
+  AlertTriangle,
+} from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 
 interface NavbarProps {
   onMenuClick: () => void;
 }
 
+const notifications = [
+  {
+    id: 1,
+    title: "New appointment request",
+    description: "John Doe requested an appointment for tomorrow at 2:00 PM",
+    time: "5 minutes ago",
+    type: "info",
+    read: false,
+  },
+  {
+    id: 2,
+    title: "Appointment confirmed",
+    description: "Your meeting with Sarah Smith is confirmed for today at 4:30 PM",
+    time: "1 hour ago",
+    type: "success",
+    read: false,
+  },
+  {
+    id: 3,
+    title: "Appointment cancelled",
+    description: "Mike Johnson cancelled their appointment scheduled for tomorrow",
+    time: "2 hours ago",
+    type: "warning",
+    read: true,
+  },
+  {
+    id: 4,
+    title: "Payment received",
+    description: "You received a payment of $75.00 from Emily Davis",
+    time: "Yesterday",
+    type: "success",
+    read: true,
+  },
+];
+
 const Navbar = ({ onMenuClick }: NavbarProps) => {
   const isMobile = useIsMobile();
   const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context in a real app
+  const [unreadCount, setUnreadCount] = useState(notifications.filter(n => !n.read).length);
+
+  const handleNotificationClick = () => {
+    setUnreadCount(0);
+  };
+
+  const getNotificationIcon = (type: string) => {
+    switch(type) {
+      case "success":
+        return <Check className="h-4 w-4 text-green-500" />;
+      case "warning":
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case "info":
+      default:
+        return <Info className="h-4 w-4 text-blue-500" />;
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900/90 dark:border-gray-800 border-b z-10 animate-fade-in backdrop-blur-sm transition-colors duration-300">
@@ -47,10 +110,64 @@ const Navbar = ({ onMenuClick }: NavbarProps) => {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5 text-gray-500 hover:text-calendoodle-purple transition-colors dark:text-gray-400 dark:hover:text-calendoodle-purple" />
-            <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5 text-gray-500 hover:text-calendoodle-purple transition-colors dark:text-gray-400 dark:hover:text-calendoodle-purple" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-80 dark:bg-gray-800 dark:border-gray-700" align="end">
+              <DropdownMenuLabel className="flex justify-between items-center dark:text-white">
+                <span>Notifications</span>
+                <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" onClick={handleNotificationClick}>
+                  Mark all as read
+                </Button>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="dark:bg-gray-700" />
+              <div className="max-h-[300px] overflow-y-auto">
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <DropdownMenuItem key={notification.id} className="p-0 focus:bg-transparent">
+                      <div className={`w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700/50 cursor-pointer ${!notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}>
+                        <div className="flex items-start gap-2">
+                          <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 mt-1">
+                            {getNotificationIcon(notification.type)}
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="flex justify-between">
+                              <p className="text-sm font-medium">{notification.title}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{notification.time}</p>
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-300">
+                              {notification.description}
+                            </p>
+                          </div>
+                          {!notification.read && (
+                            <div className="h-2 w-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                          )}
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  ))
+                ) : (
+                  <div className="py-6 text-center">
+                    <p className="text-gray-500 dark:text-gray-400">No notifications yet</p>
+                  </div>
+                )}
+              </div>
+              <DropdownMenuSeparator className="dark:bg-gray-700" />
+              <DropdownMenuItem className="justify-center focus:bg-transparent">
+                <Link to="/notifications" className="text-sm text-calendoodle-blue hover:text-calendoodle-blue/80 dark:hover:text-calendoodle-blue/90 font-medium">
+                  View all notifications
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           {isLoggedIn ? (
             <DropdownMenu>
