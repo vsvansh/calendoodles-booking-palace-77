@@ -1,6 +1,9 @@
 
 import { useState } from "react";
-import { format } from "date-fns"; // Add this import
+import { format } from "date-fns";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
 import MonthView from "@/components/calendar/MonthView";
 import WeekView from "@/components/calendar/WeekView";
@@ -78,6 +81,8 @@ const Calendar = () => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [isEventDetailModalOpen, setIsEventDetailModalOpen] = useState(false);
   const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
+  const [isQuickEventModalOpen, setIsQuickEventModalOpen] = useState(false);
+  const [quickEvent, setQuickEvent] = useState({ title: '', date: format(new Date(), 'yyyy-MM-dd') });
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
   const [isDragging, setIsDragging] = useState(false);
@@ -94,6 +99,27 @@ const Calendar = () => {
       title: "Event created",
       description: "Your event has been successfully created.",
     });
+  };
+  
+  const handleQuickEventCreate = () => {
+    if (quickEvent.title.trim()) {
+      const newEvent: CalendarEvent = {
+        id: String(Date.now()),
+        title: quickEvent.title,
+        date: quickEvent.date,
+        time: "09:00",
+        duration: 60,
+        status: "confirmed",
+        color: "#3498db"
+      };
+      setEvents(prev => [...prev, newEvent]);
+      setIsQuickEventModalOpen(false);
+      setQuickEvent({ title: '', date: format(new Date(), 'yyyy-MM-dd') });
+      toast({
+        title: "Event created",
+        description: "Your quick event has been successfully created.",
+      });
+    }
   };
 
   const handleTimeSlotClick = (date: Date) => {
@@ -149,15 +175,24 @@ const Calendar = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Calendar</h1>
-        <Button 
-          onClick={() => {
-            setSelectedTimeSlot(new Date());
-            setIsCreateEventModalOpen(true);
-          }}
-          className="calendoodle-btn calendoodle-btn-primary"
-        >
-          <Plus className="h-4 w-4 mr-1" /> New Event
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={() => setIsQuickEventModalOpen(true)}
+            variant="outline"
+            className="border-calendoodle-purple/50 text-calendoodle-purple hover:bg-calendoodle-purple/10 dark:border-calendoodle-purple/30 dark:hover:bg-calendoodle-purple/20"
+          >
+            Quick Add
+          </Button>
+          <Button 
+            onClick={() => {
+              setSelectedTimeSlot(new Date());
+              setIsCreateEventModalOpen(true);
+            }}
+            className="calendoodle-btn calendoodle-btn-primary"
+          >
+            <Plus className="h-4 w-4 mr-1" /> New Event
+          </Button>
+        </div>
       </div>
 
       <div>
@@ -210,6 +245,41 @@ const Calendar = () => {
         initialDate={selectedTimeSlot}
         onCreate={handleCreateEvent}
       />
+      
+      <Dialog open={isQuickEventModalOpen} onOpenChange={setIsQuickEventModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Quick Add Event</DialogTitle>
+            <DialogDescription>
+              Quickly add a new event to your calendar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Event Title</Label>
+              <Input
+                id="title"
+                value={quickEvent.title}
+                onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
+                placeholder="Enter event title"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                type="date"
+                value={quickEvent.date}
+                onChange={(e) => setQuickEvent({ ...quickEvent, date: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsQuickEventModalOpen(false)}>Cancel</Button>
+            <Button onClick={handleQuickEventCreate}>Create Event</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

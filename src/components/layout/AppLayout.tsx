@@ -43,7 +43,7 @@ const AppLayout = () => {
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 dark:bg-gradient-to-b dark:from-gray-900 dark:via-gray-800/90 dark:to-gray-900 transition-colors duration-300">
       <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
-      <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} sidebarOpen={showSidebar} />
+      <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} />
       
       <div ref={sidebarRef}>
         <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
@@ -57,9 +57,8 @@ const AppLayout = () => {
         <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)]">
           <Outlet />
         </div>
+        <Footer />
       </main>
-      
-      <Footer />
     </div>
   );
 };

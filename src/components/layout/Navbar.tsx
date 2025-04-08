@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -28,6 +27,7 @@ import { ThemeToggle } from "../ThemeToggle";
 
 interface NavbarProps {
   onMenuClick: () => void;
+  sidebarOpen?: boolean;
 }
 
 const notifications = [
@@ -65,9 +65,9 @@ const notifications = [
   },
 ];
 
-const Navbar = ({ onMenuClick }: NavbarProps) => {
+const Navbar = ({ onMenuClick, sidebarOpen }: NavbarProps) => {
   const isMobile = useIsMobile();
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context in a real app
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [unreadCount, setUnreadCount] = useState(notifications.filter(n => !n.read).length);
 
   const handleNotificationClick = () => {

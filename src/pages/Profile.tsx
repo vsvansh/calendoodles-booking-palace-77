@@ -1,451 +1,347 @@
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Phone, MapPin, Briefcase, Calendar, Settings, Bell, Lock, Globe, Upload, Trash, Save, Edit, LogOut } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
+import { Camera, Trash2 } from 'lucide-react';
 
 const Profile = () => {
   const { toast } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: "Sarah Johnson",
-    email: "sarah.johnson@example.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    company: "Design Studio Inc.",
-    bio: "UI/UX Designer with over 8 years of experience creating beautiful digital experiences. Passionate about user-centered design and accessibility.",
-    website: "www.sarahjohnson.design",
-    timezone: "Pacific Time (PT)",
-  });
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: true,
-    sms: false,
-    reminders: true,
-    marketing: false,
-    calendar: true,
-  });
-  
-  const handleProfileSave = () => {
-    setIsEditing(false);
+  const handleProfileUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
     toast({
-      title: "Profile updated",
-      description: "Your profile information has been saved.",
+      title: 'Profile updated',
+      description: 'Your profile information has been updated successfully.',
     });
   };
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setProfileData(prev => ({ ...prev, [name]: value }));
+  const handleSecurityUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: 'Security settings updated',
+      description: 'Your security settings have been updated successfully.',
+    });
   };
   
-  const handleNotificationChange = (key: string, value: boolean) => {
-    setNotifications(prev => ({ ...prev, [key]: value }));
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setProfileImage(e.target.result as string);
+          toast({
+            title: 'Profile image uploaded',
+            description: 'Your profile image has been updated successfully.',
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const handleRemoveImage = () => {
+    setProfileImage(null);
+    toast({
+      title: 'Profile image removed',
+      description: 'Your profile image has been removed.',
+    });
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Profile</h1>
-          <p className="text-gray-600 dark:text-gray-300">
-            Manage your account settings and preferences
-          </p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
+        <p className="text-muted-foreground">
+          Manage your account settings and preferences.
+        </p>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1 calendoodle-card h-fit">
-          <CardHeader className="flex flex-col items-center">
-            <div className="relative">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src="https://i.pravatar.cc/150?img=47" alt="Profile" />
-                <AvatarFallback className="bg-calendoodle-purple text-white text-2xl">
-                  SJ
-                </AvatarFallback>
-              </Avatar>
-              <Button
-                variant="outline"
-                size="icon"
-                className="absolute bottom-0 right-0 rounded-full bg-white dark:bg-gray-800 shadow-md border-2 border-white dark:border-gray-700"
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-            </div>
-            <CardTitle className="mt-4 text-xl">{profileData.name}</CardTitle>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">{profileData.company}</p>
-            
-            <div className="w-full mt-6">
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-3">
-                <Mail className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
-                <span className="truncate">{profileData.email}</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-3">
-                <Phone className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
-                <span>{profileData.phone}</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-3">
-                <MapPin className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
-                <span>{profileData.location}</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                <Globe className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
-                <a
-                  href={`https://${profileData.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-calendoodle-blue hover:underline"
-                >
-                  {profileData.website}
-                </a>
-              </div>
-            </div>
-            
-            <div className="w-full mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <Button
-                variant="outline"
-                className="w-full text-red-500 border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </Button>
-            </div>
-          </CardHeader>
-        </Card>
+      
+      <Tabs defaultValue="profile" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
+        </TabsList>
         
-        <div className="md:col-span-2 space-y-6">
-          <Tabs defaultValue="personal">
-            <TabsList className="grid grid-cols-3">
-              <TabsTrigger value="personal">Personal Info</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
-              <TabsTrigger value="security">Security</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="personal" className="space-y-6 mt-6">
-              <Card className="calendoodle-card">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <div className="space-y-1">
-                    <CardTitle>Personal Information</CardTitle>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Update your personal details
-                    </p>
+        <TabsContent value="profile" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Profile Picture</CardTitle>
+              <CardDescription>
+                Upload or change your profile picture
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative group">
+                  <Avatar className="h-24 w-24">
+                    <AvatarImage src={profileImage || "/placeholder.svg"} alt="Profile" />
+                    <AvatarFallback className="text-2xl">CD</AvatarFallback>
+                  </Avatar>
+                  <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Label 
+                      htmlFor="picture" 
+                      className="cursor-pointer h-full w-full flex items-center justify-center"
+                    >
+                      <Camera className="h-6 w-6 text-white" />
+                      <span className="sr-only">Upload picture</span>
+                    </Label>
+                    <Input 
+                      id="picture" 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
                   </div>
-                  <Button
-                    variant={isEditing ? "outline" : "default"}
-                    onClick={() => {
-                      if (isEditing) {
-                        handleProfileSave();
-                      } else {
-                        setIsEditing(true);
-                      }
-                    }}
-                  >
-                    {isEditing ? (
-                      <>
-                        <Save className="h-4 w-4 mr-2" /> Save
-                      </>
-                    ) : (
-                      <>
-                        <Edit className="h-4 w-4 mr-2" /> Edit
-                      </>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Upload a new photo</p>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => document.getElementById('picture')?.click()}>
+                      <Camera className="h-4 w-4 mr-2" />
+                      Change
+                    </Button>
+                    {profileImage && (
+                      <Button variant="outline" size="sm" onClick={handleRemoveImage}>
+                        <Trash2 className="h-4 w-4 mr-2 text-red-500" />
+                        Remove
+                      </Button>
                     )}
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="name"
-                          name="name"
-                          value={profileData.name}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={profileData.email}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="phone"
-                          name="phone"
-                          value={profileData.phone}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Location</Label>
-                      <div className="relative">
-                        <MapPin className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="location"
-                          name="location"
-                          value={profileData.location}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="company">Company</Label>
-                      <div className="relative">
-                        <Briefcase className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="company"
-                          name="company"
-                          value={profileData.company}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="website">Website</Label>
-                      <div className="relative">
-                        <Globe className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                        <Input
-                          id="website"
-                          name="website"
-                          value={profileData.website}
-                          onChange={handleInputChange}
-                          disabled={!isEditing}
-                          className="pl-10 calendoodle-input"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="bio">Bio</Label>
-                      <Textarea
-                        id="bio"
-                        name="bio"
-                        value={profileData.bio}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="calendoodle-input min-h-[100px]"
-                      />
-                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="notifications" className="space-y-6 mt-6">
-              <Card className="calendoodle-card">
-                <CardHeader>
-                  <CardTitle>Notification Preferences</CardTitle>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Control how you receive notifications
+                  <p className="text-xs text-muted-foreground">
+                    Recommended: Square JPG or PNG, at least 300x300 pixels
                   </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Email Notifications</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Receive updates and alerts via email
-                        </p>
-                      </div>
-                      <Switch 
-                        checked={notifications.email} 
-                        onCheckedChange={(checked) => handleNotificationChange("email", checked)} 
-                      />
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Push Notifications</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Receive updates directly to your device
-                        </p>
-                      </div>
-                      <Switch 
-                        checked={notifications.push} 
-                        onCheckedChange={(checked) => handleNotificationChange("push", checked)} 
-                      />
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">SMS Notifications</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Receive updates via text message
-                        </p>
-                      </div>
-                      <Switch 
-                        checked={notifications.sms} 
-                        onCheckedChange={(checked) => handleNotificationChange("sms", checked)} 
-                      />
-                    </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Information</CardTitle>
+              <CardDescription>
+                Update your personal details
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleProfileUpdate} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" placeholder="John" defaultValue="John" />
                   </div>
-                  
-                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium mb-4">Notification Types</h3>
-                    
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <Label className="text-base">Appointment Reminders</Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Get notified about upcoming appointments
-                          </p>
-                        </div>
-                        <Switch 
-                          checked={notifications.reminders} 
-                          onCheckedChange={(checked) => handleNotificationChange("reminders", checked)} 
-                        />
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <Label className="text-base">Marketing Updates</Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Receive news and special offers
-                          </p>
-                        </div>
-                        <Switch 
-                          checked={notifications.marketing} 
-                          onCheckedChange={(checked) => handleNotificationChange("marketing", checked)} 
-                        />
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <Label className="text-base">Calendar Sync</Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Sync appointments with your calendar
-                          </p>
-                        </div>
-                        <Switch 
-                          checked={notifications.calendar} 
-                          onCheckedChange={(checked) => handleNotificationChange("calendar", checked)} 
-                        />
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" placeholder="Doe" defaultValue="Doe" />
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="security" className="space-y-6 mt-6">
-              <Card className="calendoodle-card">
-                <CardHeader>
-                  <CardTitle>Security Settings</CardTitle>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Manage your security preferences
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Two-Factor Authentication</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Add an extra layer of security to your account
-                        </p>
-                      </div>
-                      <Button variant="outline" className="bg-calendoodle-blue/10 text-calendoodle-blue border-calendoodle-blue/20">
-                        Enable
-                      </Button>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Change Password</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Update your password regularly for better security
-                        </p>
-                      </div>
-                      <Button variant="outline">
-                        <Lock className="h-4 w-4 mr-2" /> Update
-                      </Button>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Active Sessions</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Manage devices where you're currently logged in
-                        </p>
-                      </div>
-                      <Button variant="outline">View All</Button>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input id="email" type="email" placeholder="john@example.com" defaultValue="john@example.com" />
                   </div>
-                  
-                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-medium mb-4">Data & Privacy</h3>
-                    
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <Label className="text-base">Export Your Data</Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Download a copy of your data
-                          </p>
-                        </div>
-                        <Button variant="outline">
-                          <Upload className="h-4 w-4 mr-2" /> Export
-                        </Button>
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <div className="space-y-0.5">
-                          <Label className="text-base">Delete Account</Label>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Permanently delete your account and all data
-                          </p>
-                        </div>
-                        <Button variant="outline" className="text-red-500 border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950">
-                          <Trash className="h-4 w-4 mr-2" /> Delete
-                        </Button>
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input id="phone" placeholder="+1 (555) 123-4567" defaultValue="+1 (555) 123-4567" />
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    <textarea
+                      id="bio"
+                      className="w-full min-h-[120px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      placeholder="A brief description about yourself"
+                      defaultValue="Professional hair stylist with 10+ years of experience in modern cutting techniques and color treatments."
+                    />
+                  </div>
+                </div>
+                <Button type="submit">Save Changes</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="security" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Password</CardTitle>
+              <CardDescription>
+                Change your password
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSecurityUpdate} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Input id="currentPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <Input id="newPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Input id="confirmPassword" type="password" />
+                </div>
+                <Button type="submit">Update Password</Button>
+              </form>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Two-Factor Authentication</CardTitle>
+              <CardDescription>
+                Add an extra layer of security to your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Text Message Authentication</p>
+                  <p className="text-sm text-muted-foreground">Use your phone as a second factor</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Authenticator App</p>
+                  <p className="text-sm text-muted-foreground">Use an authenticator app as a second factor</p>
+                </div>
+                <Switch />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Security Keys</p>
+                  <p className="text-sm text-muted-foreground">Use a security key (like YubiKey) as a second factor</p>
+                </div>
+                <Switch />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="notifications" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Email Notifications</CardTitle>
+              <CardDescription>
+                Manage when you'll receive email notifications
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Appointment Confirmations</p>
+                  <p className="text-sm text-muted-foreground">When a client books or confirms an appointment</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Appointment Reminders</p>
+                  <p className="text-sm text-muted-foreground">24 hours before scheduled appointments</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Payment Confirmations</p>
+                  <p className="text-sm text-muted-foreground">When a payment is processed</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Marketing Updates</p>
+                  <p className="text-sm text-muted-foreground">Special offers and new features</p>
+                </div>
+                <Switch />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="billing" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Methods</CardTitle>
+              <CardDescription>
+                Manage your payment methods
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between border p-4 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="h-14 w-20 bg-gray-200 rounded-md flex items-center justify-center">
+                    <span className="font-semibold">VISA</span>
+                  </div>
+                  <div>
+                    <p className="font-medium">Visa ending in 4242</p>
+                    <p className="text-sm text-muted-foreground">Expires 12/2025</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="sm">Edit</Button>
+              </div>
+              <Button variant="outline" className="w-full">Add Payment Method</Button>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Subscription Plan</CardTitle>
+              <CardDescription>
+                You are currently on the Professional plan
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-lg">Professional Plan</p>
+                    <p className="text-sm text-muted-foreground">$29/month, billed monthly</p>
+                  </div>
+                  <Button variant="outline">Change Plan</Button>
+                </div>
+                <Separator className="my-4" />
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <p className="text-sm">Unlimited appointments</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <p className="text-sm">Client management</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <p className="text-sm">Online payments</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                    <p className="text-sm">Email notifications</p>
+                  </div>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full text-red-500 hover:text-red-600 hover:bg-red-50">
+                Cancel Subscription
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

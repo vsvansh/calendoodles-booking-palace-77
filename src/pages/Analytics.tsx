@@ -6,8 +6,19 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowUpRight, BarChart3, PieChart as PieChartIcon, LineChart as LineChartIcon, Download } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-// Sample data
+// Sample data for different time frames
+const weeklyRevenue = [
+  { name: 'Mon', value: 800 },
+  { name: 'Tue', value: 1200 },
+  { name: 'Wed', value: 900 },
+  { name: 'Thu', value: 1500 },
+  { name: 'Fri', value: 2000 },
+  { name: 'Sat', value: 1800 },
+  { name: 'Sun', value: 1000 },
+];
+
 const monthlyRevenue = [
   { name: 'Jan', value: 4000 },
   { name: 'Feb', value: 3000 },
@@ -23,6 +34,15 @@ const monthlyRevenue = [
   { name: 'Dec', value: 10000 },
 ];
 
+const yearlyRevenue = [
+  { name: '2020', value: 35000 },
+  { name: '2021', value: 45000 },
+  { name: '2022', value: 58000 },
+  { name: '2023', value: 72000 },
+  { name: '2024', value: 88000 },
+  { name: '2025', value: 45000 },
+];
+
 const serviceData = [
   { name: 'Haircut', value: 35 },
   { name: 'Coloring', value: 25 },
@@ -33,7 +53,17 @@ const serviceData = [
 
 const COLORS = ['#8B5CF6', '#D946EF', '#F97316', '#0EA5E9', '#10B981'];
 
-const clientActivityData = [
+const weeklyClientData = [
+  { name: 'Mon', new: 2, returning: 5 },
+  { name: 'Tue', new: 3, returning: 7 },
+  { name: 'Wed', new: 1, returning: 4 },
+  { name: 'Thu', new: 4, returning: 6 },
+  { name: 'Fri', new: 5, returning: 8 },
+  { name: 'Sat', new: 7, returning: 12 },
+  { name: 'Sun', new: 2, returning: 5 },
+];
+
+const monthlyClientData = [
   { name: 'Jan', new: 45, returning: 35 },
   { name: 'Feb', new: 50, returning: 40 },
   { name: 'Mar', new: 55, returning: 45 },
@@ -48,16 +78,63 @@ const clientActivityData = [
   { name: 'Dec', new: 100, returning: 90 },
 ];
 
+const yearlyClientData = [
+  { name: '2020', new: 250, returning: 320 },
+  { name: '2021', new: 300, returning: 450 },
+  { name: '2022', new: 350, returning: 520 },
+  { name: '2023', new: 420, returning: 620 },
+  { name: '2024', new: 480, returning: 720 },
+  { name: '2025', new: 200, returning: 350 },
+];
+
 const Analytics = () => {
+  const { toast } = useToast();
   const [timeFrame, setTimeFrame] = useState("year");
   const [chartType, setChartType] = useState("revenue");
+  
+  // Get data based on selected time frame
+  const getRevenueData = () => {
+    switch(timeFrame) {
+      case 'week': return weeklyRevenue;
+      case 'month': return monthlyRevenue;
+      case 'year': 
+      default: return yearlyRevenue;
+    }
+  };
+  
+  const getClientData = () => {
+    switch(timeFrame) {
+      case 'week': return weeklyClientData;
+      case 'month': return monthlyClientData;
+      case 'year': 
+      default: return yearlyClientData;
+    }
+  };
   
   const formatCurrency = (value: number) => {
     return `$${value.toFixed(2)}`;
   };
   
-  const totalRevenue = monthlyRevenue.reduce((sum, item) => sum + item.value, 0);
-  const averageRevenue = totalRevenue / monthlyRevenue.length;
+  const handleExportData = () => {
+    toast({
+      title: "Export started",
+      description: "Your data export has been initiated.",
+    });
+  };
+  
+  const handleViewDetails = () => {
+    toast({
+      title: "Loading details",
+      description: "Detailed analytics report is being prepared.",
+    });
+  };
+  
+  // Calculate totals based on current time frame
+  const revenueData = getRevenueData();
+  const totalRevenue = revenueData.reduce((sum, item) => sum + item.value, 0);
+  const averageRevenue = totalRevenue / revenueData.length;
+  const clientData = getClientData();
+  const totalClients = clientData.reduce((sum, item) => sum + item.new + item.returning, 0);
   
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
@@ -105,7 +182,7 @@ const Analytics = () => {
             <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">524</div>
+            <div className="text-2xl font-bold">{totalClients}</div>
             <p className="text-xs text-muted-foreground">
               +12.2% from last {timeFrame}
             </p>
@@ -119,11 +196,15 @@ const Analytics = () => {
             <div className="flex-1">
               <CardTitle>Revenue Overview</CardTitle>
               <CardDescription>
-                Monthly revenue for current year
+                {timeFrame === 'week' ? 'Weekly' : timeFrame === 'month' ? 'Monthly' : 'Yearly'} revenue
               </CardDescription>
             </div>
             <div className="flex items-center gap-3">
-              <Select defaultValue="year" onValueChange={setTimeFrame}>
+              <Select 
+                defaultValue="year" 
+                value={timeFrame}
+                onValueChange={setTimeFrame}
+              >
                 <SelectTrigger className="h-8 w-[120px]">
                   <SelectValue placeholder="Select timeframe" />
                 </SelectTrigger>
@@ -133,7 +214,7 @@ const Analytics = () => {
                   <SelectItem value="year">This Year</SelectItem>
                 </SelectContent>
               </Select>
-              <Button size="sm" variant="outline" className="h-8 gap-1">
+              <Button size="sm" variant="outline" className="h-8 gap-1" onClick={handleExportData}>
                 <Download className="h-4 w-4" />
                 Export
               </Button>
@@ -153,7 +234,7 @@ const Analytics = () => {
               </TabsList>
               <TabsContent value="revenue" className="w-full">
                 <ResponsiveContainer width="100%" height={350}>
-                  <BarChart data={monthlyRevenue} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={getRevenueData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis tickFormatter={(value) => `$${value}`} />
@@ -165,7 +246,7 @@ const Analytics = () => {
               </TabsContent>
               <TabsContent value="clients" className="w-full">
                 <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={clientActivityData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <LineChart data={getClientData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
@@ -224,7 +305,7 @@ const Analytics = () => {
               <p className="text-sm font-medium">Revenue increased by 12%</p>
               <p className="text-xs text-muted-foreground">Compared to last month</p>
             </div>
-            <Button variant="ghost" size="sm">View</Button>
+            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
           </div>
           <div className="flex items-center gap-4 rounded-md border p-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -234,7 +315,7 @@ const Analytics = () => {
               <p className="text-sm font-medium">15 new clients this month</p>
               <p className="text-xs text-muted-foreground">5 more than last month</p>
             </div>
-            <Button variant="ghost" size="sm">View</Button>
+            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
           </div>
           <div className="flex items-center gap-4 rounded-md border p-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -244,7 +325,7 @@ const Analytics = () => {
               <p className="text-sm font-medium">Appointment bookings up 8%</p>
               <p className="text-xs text-muted-foreground">More clients scheduling online</p>
             </div>
-            <Button variant="ghost" size="sm">View</Button>
+            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
           </div>
         </CardContent>
       </Card>
