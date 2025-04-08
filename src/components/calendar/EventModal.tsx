@@ -4,23 +4,14 @@ import { Button } from "@/components/ui/button";
 import { format, parseISO } from "date-fns";
 import { Clock, Calendar as CalendarIcon, MapPin, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "confirmed" | "pending" | "cancelled";
-  color: string;
-}
+import { CalendarEvent } from "@/types/calendar";
 
 interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   date: Date;
-  events: Event[];
-  onEventClick: (event: Event) => void;
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
 }
 
 const EventModal = ({ isOpen, onClose, date, events, onEventClick }: EventModalProps) => {

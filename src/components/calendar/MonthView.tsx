@@ -3,21 +3,12 @@ import { useState } from "react";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, format, isSameMonth, isSameDay, parseISO } from "date-fns";
 import { Button } from "@/components/ui/button";
 import EventModal from "./EventModal";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "confirmed" | "pending" | "cancelled";
-  color: string;
-}
+import { CalendarEvent } from "@/types/calendar";
 
 interface MonthViewProps {
   currentDate: Date;
-  events: Event[];
-  onEventClick: (event: Event) => void;
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
 }
 
 const MonthView = ({ currentDate, events, onEventClick }: MonthViewProps) => {

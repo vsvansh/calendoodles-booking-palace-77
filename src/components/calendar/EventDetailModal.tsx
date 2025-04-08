@@ -4,21 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, parseISO } from "date-fns";
 import { Clock, Calendar, MapPin, Users, Video, AlertTriangle, Edit, Trash2, Check } from "lucide-react";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "confirmed" | "pending" | "cancelled";
-  color: string;
-}
+import { CalendarEvent } from "@/types/calendar";
 
 interface EventDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: Event;
+  event: CalendarEvent;
   onDelete: (id: string) => void;
 }
 

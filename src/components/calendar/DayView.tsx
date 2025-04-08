@@ -1,20 +1,11 @@
 
 import { format, isSameHour, parseISO } from "date-fns";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "confirmed" | "pending" | "cancelled";
-  color: string;
-}
+import { CalendarEvent } from "@/types/calendar";
 
 interface DayViewProps {
   currentDate: Date;
-  events: Event[];
-  onEventClick: (event: Event) => void;
+  events: CalendarEvent[];
+  onEventClick: (event: CalendarEvent) => void;
   onTimeSlotClick: (date: Date) => void;
 }
 

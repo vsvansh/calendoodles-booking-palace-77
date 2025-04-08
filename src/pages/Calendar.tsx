@@ -9,9 +9,10 @@ import CreateEventModal from "@/components/calendar/CreateEventModal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { CalendarEvent } from "@/types/calendar";
 
 // Mock events data
-const mockEvents = [
+const mockEvents: CalendarEvent[] = [
   {
     id: "1",
     title: "Strategy Meeting",
@@ -63,18 +64,18 @@ const Calendar = () => {
   const { toast } = useToast();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<"month" | "week" | "day">("month");
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [isEventDetailModalOpen, setIsEventDetailModalOpen] = useState(false);
   const [isCreateEventModalOpen, setIsCreateEventModalOpen] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<Date | null>(null);
-  const [events, setEvents] = useState(mockEvents);
+  const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
 
-  const handleEventClick = (event: Event) => {
+  const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event);
     setIsEventDetailModalOpen(true);
   };
 
-  const handleCreateEvent = (newEvent: Event) => {
+  const handleCreateEvent = (newEvent: CalendarEvent) => {
     setEvents((prevEvents) => [...prevEvents, { ...newEvent, id: String(Date.now()) }]);
     setIsCreateEventModalOpen(false);
     toast({

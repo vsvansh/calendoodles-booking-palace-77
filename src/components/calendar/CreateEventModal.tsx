@@ -20,22 +20,13 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon, Clock, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: "confirmed" | "pending" | "cancelled";
-  color: string;
-}
+import { CalendarEvent } from "@/types/calendar";
 
 interface CreateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialDate: Date | null;
-  onCreate: (event: Event) => void;
+  onCreate: (event: CalendarEvent) => void;
 }
 
 const CreateEventModal = ({ isOpen, onClose, initialDate, onCreate }: CreateEventModalProps) => {
@@ -44,7 +35,7 @@ const CreateEventModal = ({ isOpen, onClose, initialDate, onCreate }: CreateEven
     title: "",
     time: initialDate ? format(initialDate, "HH:mm") : "09:00",
     duration: "30",
-    status: "confirmed",
+    status: "confirmed" as "confirmed" | "pending" | "cancelled",
     color: "#3498db",
   });
 
@@ -85,7 +76,7 @@ const CreateEventModal = ({ isOpen, onClose, initialDate, onCreate }: CreateEven
       date: format(date, "yyyy-MM-dd"),
       time: formData.time,
       duration: parseInt(formData.duration),
-      status: formData.status as "confirmed" | "pending" | "cancelled",
+      status: formData.status,
       color: formData.color,
     });
   };
@@ -181,7 +172,7 @@ const CreateEventModal = ({ isOpen, onClose, initialDate, onCreate }: CreateEven
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) =>
+                onValueChange={(value: "confirmed" | "pending" | "cancelled") =>
                   setFormData((prev) => ({ ...prev, status: value }))
                 }
               >
@@ -191,6 +182,7 @@ const CreateEventModal = ({ isOpen, onClose, initialDate, onCreate }: CreateEven
                 <SelectContent>
                   <SelectItem value="confirmed">Confirmed</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
                 </SelectContent>
               </Select>
             </div>
