@@ -7,15 +7,13 @@ export function ThemeToggle() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     // Check for dark mode preference
     if (typeof window !== 'undefined') {
-      // Check for system preference
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return true;
-      }
       // Check for stored preference
       const storedTheme = window.localStorage.getItem('theme');
       if (storedTheme) {
         return storedTheme === 'dark';
       }
+      // Check for system preference
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
@@ -41,6 +39,7 @@ export function ThemeToggle() {
       size="icon" 
       onClick={toggleTheme} 
       className="rounded-full transition-all duration-500 relative overflow-hidden"
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       <div className="relative z-10">
         {isDarkMode ? (

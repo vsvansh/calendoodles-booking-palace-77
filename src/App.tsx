@@ -8,9 +8,13 @@ import AppLayout from "./components/layout/AppLayout";
 import Index from "./pages/Index";
 import Calendar from "./pages/Calendar";
 import Appointments from "./pages/Appointments";
+import Services from "./pages/Services";
+import Clients from "./pages/Clients";
+import Analytics from "./pages/Analytics";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import ChatbotDrawer from "./components/chat/ChatbotDrawer";
 
 const queryClient = new QueryClient();
 
@@ -30,10 +34,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/appointments" element={<Appointments />} />
-            <Route path="/services" element={<Navigate to="/" />} />
-            <Route path="/clients" element={<Navigate to="/" />} />
-            <Route path="/payments" element={<Navigate to="/" />} />
-            <Route path="/analytics" element={<Navigate to="/" />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/profile" element={<Navigate to="/" />} />
             <Route path="/settings" element={<Navigate to="/" />} />
           </Route>
@@ -41,6 +44,7 @@ const App = () => (
           {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatbotDrawer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

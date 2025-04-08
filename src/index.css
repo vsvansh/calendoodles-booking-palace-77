@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 44 30% 96%;
+    --background: 44 30% 98%;
     --foreground: 210 29% 24%;
 
     --card: 0 0% 100%;
@@ -46,7 +46,7 @@
   }
 
   .dark {
-    --background: 212 30% 8%;
+    --background: 212 35% 8%;
     --foreground: 0 0% 98%;
 
     --card: 212 30% 12%;
@@ -65,7 +65,7 @@
     --accent-foreground: 0 0% 98%;
 
     --muted: 210 30% 20%;
-    --muted-foreground: 210 20% 65%;
+    --muted-foreground: 210 20% 70%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -74,7 +74,7 @@
     --input: 212 30% 20%;
     --ring: 204 70% 53%;
 
-    --sidebar-background: 212 30% 10%;
+    --sidebar-background: 212 35% 10%;
     --sidebar-foreground: 240 5% 96%;
     --sidebar-primary: 204 70% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -93,11 +93,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  ::selection {
+    @apply bg-calendoodle-blue/30 dark:bg-calendoodle-blue/50;
+  }
 }
 
 @layer components {
   .calendoodle-card {
-    @apply bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/10 hover:shadow-xl transition-all duration-300;
+    @apply bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/10 hover:shadow-xl transition-all duration-300 backdrop-blur-sm;
   }
   
   .calendoodle-btn {
@@ -129,7 +133,7 @@
   }
 
   .glow-card {
-    @apply dark:shadow-[0_0_15px_rgba(52,152,219,0.15)];
+    @apply dark:shadow-[0_0_15px_rgba(52,152,219,0.15)] hover:shadow-md dark:hover:shadow-[0_0_25px_rgba(52,152,219,0.25)] transition-all duration-300;
   }
 
   .dark .shadow-glow-blue {
@@ -146,6 +150,14 @@
   
   .dark .shadow-glow-green {
     @apply shadow-[0_0_20px_rgba(46,204,113,0.35)];
+  }
+  
+  .dark .feature-card {
+    @apply backdrop-blur-md bg-gray-800/40 border border-gray-700/50;
+  }
+  
+  .dark .glass-effect {
+    @apply backdrop-blur-lg bg-gray-900/30 border border-gray-700/50;
   }
 }
 
@@ -189,4 +201,39 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* Dark mode specific styles */
+.dark .calendoodle-card {
+  background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+}
+
+.dark .hero-gradient {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%);
+}
+
+.dark .glow-text {
+  text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+/* Feature card hover effects */
+.feature-card {
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Glass morphism effects */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass-effect {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

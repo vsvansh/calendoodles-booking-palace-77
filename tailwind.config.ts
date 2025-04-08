@@ -61,6 +61,9 @@ export default {
 				  red: '#e74c3c',
 				  cream: '#faf8f1',
 				  charcoal: '#2c3e50',
+				  darkBlue: '#1a365d',
+				  darkPurple: '#4a235a',
+				  darkGreen: '#1e6641',
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -122,6 +125,14 @@ export default {
                 'ping': {
                   '75%, 100%': { transform: 'scale(2)', opacity: '0' },
                   '0%': { transform: 'scale(1)', opacity: '0.5' }
+                },
+                'scale-up': {
+                  '0%': { transform: 'scale(0.95)', opacity: '0.7' },
+                  '100%': { transform: 'scale(1)', opacity: '1' }
+                },
+                'float': {
+                  '0%, 100%': { transform: 'translateY(0)' },
+                  '50%': { transform: 'translateY(-10px)' }
                 }
 			},
 			animation: {
@@ -133,7 +144,9 @@ export default {
 				'slide-up': 'slide-up 0.3s ease-out',
 				'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
                 'spin-slow': 'spin-slow 3s linear infinite',
-                'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+                'ping': 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+                'scale-up': 'scale-up 0.3s ease-out',
+                'float': 'float 6s ease-in-out infinite'
 			},
             boxShadow: {
               'glow-blue': '0 0 15px rgba(52,152,219,0.3)',
