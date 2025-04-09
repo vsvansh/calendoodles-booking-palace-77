@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CalendarEvent } from "@/types/calendar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Mock events data
 const mockEvents: CalendarEvent[] = [
@@ -86,11 +87,12 @@ const Calendar = () => {
   const [isQuickEventModalOpen, setIsQuickEventModalOpen] = useState(false);
   const [isJumpToDateOpen, setIsJumpToDateOpen] = useState(false);
   const [jumpToDate, setJumpToDate] = useState<Date>(new Date());
+  const [jumpToDateInput, setJumpToDateInput] = useState<string>("");
   const [quickEvent, setQuickEvent] = useState({ title: '', date: format(new Date(), 'yyyy-MM-dd') });
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<Date | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
   const [isDragging, setIsDragging] = useState(false);
-
+  
   const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event);
     setIsEventDetailModalOpen(true);
@@ -175,13 +177,41 @@ const Calendar = () => {
     );
   };
 
+  const parseCustomDateFormat = (dateString: string): Date | null => {
+    try {
+      // Try to parse DD-MM-YYYY format
+      if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+        return parse(dateString, 'dd-MM-yyyy', new Date());
+      }
+      // Try to parse DD/MM/YYYY format
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+        return parse(dateString, 'dd/MM/yyyy', new Date());
+      }
+      // Try other formats if needed
+      return new Date(dateString);
+    } catch (error) {
+      return null;
+    }
+  };
+
   const handleJumpToDate = () => {
-    setCurrentDate(jumpToDate);
-    setIsJumpToDateOpen(false);
-    toast({
-      title: "Date changed",
-      description: `Calendar view changed to ${format(jumpToDate, "MMMM d, yyyy")}`,
-    });
+    const parsedDate = parseCustomDateFormat(jumpToDateInput);
+    
+    if (parsedDate && !isNaN(parsedDate.getTime())) {
+      setCurrentDate(parsedDate);
+      setJumpToDate(parsedDate);
+      setIsJumpToDateOpen(false);
+      toast({
+        title: "Date changed",
+        description: `Calendar view changed to ${format(parsedDate, "MMMM d, yyyy")}`,
+      });
+    } else {
+      toast({
+        title: "Invalid date format",
+        description: "Please enter date in DD-MM-YYYY format",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -189,7 +219,7 @@ const Calendar = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Calendar</h1>
         <div className="flex gap-2">
-          <Popover>
+          <Popover open={isJumpToDateOpen} onOpenChange={setIsJumpToDateOpen}>
             <PopoverTrigger asChild>
               <Button 
                 variant="outline"
@@ -198,23 +228,47 @@ const Calendar = () => {
                 <CalendarIcon className="h-4 w-4 mr-2" /> Jump to Date
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <CalendarPicker
-                mode="single"
-                selected={jumpToDate}
-                onSelect={(date) => {
-                  if (date) {
-                    setJumpToDate(date);
-                    setCurrentDate(date);
-                    toast({
-                      title: "Date changed",
-                      description: `Calendar view changed to ${format(date, "MMMM d, yyyy")}`,
-                    });
-                  }
-                }}
-                initialFocus
-                className="p-3 pointer-events-auto"
-              />
+            <PopoverContent className="w-auto p-4" align="end">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="jump-date">Enter Date (DD-MM-YYYY)</Label>
+                  <Input 
+                    id="jump-date" 
+                    placeholder="DD-MM-YYYY" 
+                    value={jumpToDateInput}
+                    onChange={(e) => setJumpToDateInput(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setIsJumpToDateOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handleJumpToDate}>Jump to Date</Button>
+                </div>
+                <div className="pt-2 pb-1">
+                  <Label className="text-sm text-muted-foreground">Or select a date:</Label>
+                </div>
+                <CalendarPicker
+                  mode="single"
+                  selected={jumpToDate}
+                  onSelect={(date) => {
+                    if (date) {
+                      setJumpToDate(date);
+                      setCurrentDate(date);
+                      setIsJumpToDateOpen(false);
+                      toast({
+                        title: "Date changed",
+                        description: `Calendar view changed to ${format(date, "MMMM d, yyyy")}`,
+                      });
+                    }
+                  }}
+                  className="p-0 pointer-events-auto"
+                />
+              </div>
             </PopoverContent>
           </Popover>
           

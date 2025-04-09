@@ -44,7 +44,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
   ];
 
   const renderNavItems = () => (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {navigationItems.map((item) => {
         const IconComponent = item.icon;
         const isActive = location.pathname === item.href;
@@ -61,7 +61,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
                     : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-200 dark:hover:text-white'}`}
                   onClick={() => isMobile && setIsOpen(false)}
                 >
-                  <IconComponent className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300 ${isActive ? 'text-calendoodle-purple' : ''}`} aria-hidden="true" />
+                  <IconComponent className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300 ${isActive ? 'text-calendoodle-purple dark:text-calendoodle-blue' : ''}`} aria-hidden="true" />
                   {(isOpen || isMobile) && <span className="truncate transition-all duration-300">{item.name}</span>}
                 </Link>
               </TooltipTrigger>
@@ -77,7 +77,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
 
   const mobileView = () => (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-900 dark:border-gray-800">
+      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-950 dark:border-gray-800">
         <ScrollArea className="h-full py-4 scrollbar-thin">
           <div className="px-3 pb-16 pt-2">
             {renderNavItems()}
@@ -92,8 +92,8 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
     <div
       ref={ref}
       className={`fixed z-20 ${
-        isOpen ? 'w-64' : 'w-16'
-      } left-0 inset-y-0 bg-white dark:bg-gray-900 border-r dark:border-gray-800 h-screen pt-16 shadow-sm transition-all duration-300 ease-in-out`}
+        isOpen ? 'w-64' : 'w-20'
+      } left-0 inset-y-0 bg-white dark:bg-gray-950 border-r dark:border-gray-800 h-screen pt-16 shadow-sm transition-all duration-300 ease-in-out`}
     >
       <div className="flex items-center justify-end px-4">
         <Button
@@ -104,9 +104,9 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
           aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
           {isOpen ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           ) : (
-            <ChevronRight className="h-4 w-4 rotate-180" />
+            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 rotate-180" />
           )}
         </Button>
       </div>
@@ -120,7 +120,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
   return (
     <>
       {isMobile ? mobileView() : desktopView()}
-      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-16'} transition-all duration-300`} />}
+      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} transition-all duration-300`} />}
     </>
   );
 });

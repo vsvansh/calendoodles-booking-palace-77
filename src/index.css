@@ -46,42 +46,42 @@
   }
 
   .dark {
-    --background: 212 35% 8%;
+    --background: 210 35% 6%;
     --foreground: 0 0% 98%;
 
-    --card: 212 30% 12%;
+    --card: 212 30% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 222 25% 14%;
+    --popover: 222 25% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 204 70% 53%;
+    --primary: 204 85% 65%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 282 39% 53%;
+    --secondary: 282 70% 65%;
     --secondary-foreground: 0 0% 98%;
 
-    --accent: 35 90% 52%;
+    --accent: 35 95% 60%;
     --accent-foreground: 0 0% 98%;
 
-    --muted: 210 30% 20%;
+    --muted: 210 30% 18%;
     --muted-foreground: 210 20% 70%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 90% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 212 30% 18%;
-    --input: 212 30% 20%;
-    --ring: 204 70% 53%;
+    --border: 212 30% 15%;
+    --input: 212 30% 18%;
+    --ring: 204 85% 65%;
 
-    --sidebar-background: 212 35% 10%;
+    --sidebar-background: 210 35% 8%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 204 70% 50%;
+    --sidebar-primary: 204 85% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 212 28% 16%;
+    --sidebar-accent: 212 28% 14%;
     --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 212 28% 16%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 212 28% 15%;
+    --sidebar-ring: 217 91% 65%;
   }
 }
 
@@ -95,7 +95,7 @@
   }
   
   ::selection {
-    @apply bg-calendoodle-blue/30 dark:bg-calendoodle-blue/50;
+    @apply bg-calendoodle-blue/30 dark:bg-calendoodle-blue/60;
   }
 
   .dark .scrollbar-thin::-webkit-scrollbar-track {
@@ -103,13 +103,13 @@
   }
   
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 hover:bg-gray-500;
+    @apply bg-calendoodle-blue/40 hover:bg-calendoodle-blue/60;
   }
 }
 
 @layer components {
   .calendoodle-card {
-    @apply bg-white dark:bg-gray-800/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/10 hover:shadow-xl transition-all duration-300 backdrop-blur-sm dark:backdrop-blur-md;
+    @apply bg-white dark:bg-gray-900/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/20 hover:shadow-xl transition-all duration-300 backdrop-blur-sm dark:backdrop-blur-md transform hover:scale-[1.01] hover:dark:shadow-glow-blue;
   }
   
   .calendoodle-btn {
@@ -141,31 +141,31 @@
   }
 
   .glow-card {
-    @apply dark:shadow-[0_0_15px_rgba(52,152,219,0.15)] hover:shadow-md dark:hover:shadow-[0_0_25px_rgba(52,152,219,0.25)] transition-all duration-300;
+    @apply dark:shadow-[0_0_25px_rgba(52,152,219,0.2)] hover:shadow-md dark:hover:shadow-[0_0_35px_rgba(52,152,219,0.35)] transition-all duration-300;
   }
 
   .dark .shadow-glow-blue {
-    @apply shadow-[0_0_20px_rgba(52,152,219,0.35)];
+    @apply shadow-[0_0_25px_rgba(52,152,219,0.4)];
   }
   
   .dark .shadow-glow-purple {
-    @apply shadow-[0_0_20px_rgba(155,89,182,0.35)];
+    @apply shadow-[0_0_25px_rgba(155,89,182,0.4)];
   }
   
   .dark .shadow-glow-orange {
-    @apply shadow-[0_0_20px_rgba(243,156,18,0.35)];
+    @apply shadow-[0_0_25px_rgba(243,156,18,0.4)];
   }
   
   .dark .shadow-glow-green {
-    @apply shadow-[0_0_20px_rgba(46,204,113,0.35)];
+    @apply shadow-[0_0_25px_rgba(46,204,113,0.4)];
   }
   
   .dark .feature-card {
-    @apply backdrop-blur-md bg-gray-800/40 border border-gray-700/50;
+    @apply backdrop-blur-md bg-gray-800/50 border border-gray-700/50 hover:border-calendoodle-blue/40 transition-all duration-300;
   }
   
   .dark .glass-effect {
-    @apply backdrop-blur-lg bg-gray-900/30 border border-gray-700/50;
+    @apply backdrop-blur-lg bg-gray-900/40 border border-gray-700/50 transition-all duration-300;
   }
 
   /* Enhanced Dropdowns in Dark Mode */
@@ -176,16 +176,16 @@
   .dark .dropdown-content,
   .dark [role="menu"],
   .dark [role="listbox"] {
-    @apply bg-gray-800 border border-gray-700 shadow-lg shadow-black/30 backdrop-blur-lg;
+    @apply bg-gray-800/90 border border-gray-700/80 shadow-lg shadow-black/30 backdrop-blur-lg;
   }
   
   /* Enhanced Buttons in Dark Mode */
   .dark button {
-    @apply transition-shadow;
+    @apply transition-all duration-300;
   }
   
   .dark .primary-button-gradient {
-    @apply bg-gradient-to-r from-calendoodle-blue to-calendoodle-purple;
+    @apply bg-gradient-to-r from-calendoodle-blue to-calendoodle-purple hover:from-calendoodle-blue/90 hover:to-calendoodle-purple/90 transition-all duration-300;
   }
   
   /* Scrollbars */
@@ -204,6 +204,49 @@
   
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply bg-gray-300 hover:bg-gray-400 rounded-full;
+  }
+  
+  /* New neon-styled elements for dark mode */
+  .dark .neon-border {
+    @apply border border-transparent relative;
+  }
+  
+  .dark .neon-border::before {
+    content: "";
+    @apply absolute inset-0 border border-transparent rounded-lg;
+    background: linear-gradient(90deg, #3498db, #9b59b6, #f39c12, #3498db);
+    background-size: 400% 400%;
+    animation: border-flow 8s ease-in-out infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  .dark .neon-text {
+    @apply font-semibold relative;
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
+    animation: pulse-text 3s ease-in-out infinite;
+  }
+  
+  .dark .neon-blue {
+    @apply text-calendoodle-blue;
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(52, 152, 219, 0.8));
+  }
+  
+  .dark .neon-purple {
+    @apply text-calendoodle-purple;
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(155, 89, 182, 0.8));
+  }
+  
+  .dark .neon-orange {
+    @apply text-calendoodle-orange;
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(243, 156, 18, 0.8));
+  }
+
+  /* Enhanced card hover */
+  .interactive-card {
+    @apply transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-glow-blue;
   }
 }
 
@@ -249,18 +292,38 @@
   }
 }
 
+@keyframes border-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-text {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(52, 152, 219, 0.8);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(52, 152, 219, 1);
+    opacity: 0.95;
+  }
+}
+
 /* Dark mode specific styles */
 .dark .calendoodle-card {
-  background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom right, rgba(26, 32, 44, 0.9), rgba(15, 23, 42, 0.9));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .dark .hero-gradient {
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.3) 0%, rgba(155, 89, 182, 0.3) 100%);
 }
 
 .dark .glow-text {
-  text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+  text-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
 }
 
 /* Feature card hover effects */
@@ -287,32 +350,32 @@
 
 /* Enhanced Dark Mode Elements */
 .dark .neo-blur {
-  @apply backdrop-blur-xl bg-black/40 border border-white/10;
+  @apply backdrop-blur-xl bg-black/50 border border-white/10;
 }
 
 .dark .glass-panel {
-  @apply bg-gray-900/40 backdrop-blur-lg border border-gray-700/40 shadow-xl;
+  @apply bg-gray-900/50 backdrop-blur-lg border border-calendoodle-blue/20 shadow-xl transition-all duration-300;
 }
 
 .dark .frosted-panel {
   background: rgba(17, 25, 40, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.125);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .dark .text-glow {
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .dark .blue-glow {
-  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
+  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.7));
 }
 
 .dark .purple-glow {
-  filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.6));
+  filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.7));
 }
 
 .dark .orange-glow {
-  filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.6));
+  filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.7));
 }

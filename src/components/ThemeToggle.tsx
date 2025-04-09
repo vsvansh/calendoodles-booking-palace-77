@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check for dark mode preference
+    // Default to dark mode
     if (typeof window !== 'undefined') {
       // Check for stored preference
       const storedTheme = window.localStorage.getItem('theme');
       if (storedTheme) {
         return storedTheme === 'dark';
       }
-      // Check for system preference
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      // Default to dark mode instead of checking system preference
+      return true;
     }
-    return false;
+    return true;
   });
 
   useEffect(() => {

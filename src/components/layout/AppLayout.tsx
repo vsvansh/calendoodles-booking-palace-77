@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "./Navbar";
@@ -11,6 +11,7 @@ const AppLayout = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const location = useLocation();
   
   // Close the sidebar on mobile when clicking outside
   useOnClickOutside(sidebarRef, () => {
@@ -38,21 +39,26 @@ const AppLayout = () => {
       localStorage.setItem('sidebar-state', String(showSidebar));
     }
   }, [showSidebar, isMobile]);
+  
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 dark:bg-gradient-to-b dark:from-gray-900 dark:via-gray-800/90 dark:to-gray-900 transition-colors duration-300">
-      <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-300">
+      <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
       <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} />
       
       <div className="flex flex-grow pt-16">
-        <div ref={sidebarRef} className="z-10">
+        <div ref={sidebarRef} className="z-20">
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
         </div>
         
         <main 
-          className={`flex-grow z-1 transition-all duration-300 ease-in-out pb-16 ${
-            showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-16'
+          className={`flex-grow z-10 transition-all duration-300 ease-in-out pb-20 ${
+            showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-20'
           }`}
         >
           <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)]">
