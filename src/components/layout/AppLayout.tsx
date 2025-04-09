@@ -61,7 +61,7 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-500">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-500">
       {/* Radial gradient for enhanced dark mode */}
       <div className="dark:bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       <div className="dark:bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] dark:from-calendoodle-purple/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
@@ -75,15 +75,16 @@ const AppLayout = () => {
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
         </div>
         
-        {/* Main content area with adjusted margins */}
+        {/* Main content area with adjusted margins for sidebar spacing */}
         <main 
-          className={`flex-grow z-10 transition-all duration-500 ease-out pb-20 pt-4 ${
+          className={`flex-grow z-10 flex flex-col transition-all duration-500 ease-out ${
             showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-20'
           }`}
         >
-          <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)] animate-fade-in">
+          <div className="flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full animate-fade-in">
             <Outlet />
           </div>
+          {/* Footer is inside the main element and respects sidebar width */}
           <Footer />
         </main>
       </div>

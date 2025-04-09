@@ -10,16 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 dark:hover:shadow-[0_0_15px_rgba(52,152,219,0.5)] transition-all duration-300 active:scale-95",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 dark:hover:shadow-[0_0_15px_rgba(52,152,219,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:hover:shadow-[0_0_15px_rgba(231,76,60,0.5)] transition-all duration-300 active:scale-95",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:hover:shadow-[0_0_15px_rgba(231,76,60,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:border-gray-700 dark:hover:border-gray-600",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:border-gray-700 dark:hover:border-gray-600 transform-gpu hover:translate-y-[-1px]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:hover:shadow-[0_0_15px_rgba(155,89,182,0.5)] transition-all duration-300 active:scale-95",
-        ghost: "hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95",
-        link: "text-primary underline-offset-4 hover:underline",
-        gradient: "bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground hover:from-primary hover:to-secondary dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.6)] transition-all duration-300 active:scale-95",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:hover:shadow-[0_0_15px_rgba(155,89,182,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+        ghost: "hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+        link: "text-primary underline-offset-4 hover:underline transition-all duration-200",
+        gradient: "bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground hover:from-primary hover:to-secondary dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
       },
       size: {
         default: "h-10 px-4 py-2",

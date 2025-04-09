@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -47,11 +46,11 @@
 
   .dark {
     /* Darker background for better contrast */
-    --background: 210 40% 3%;
+    --background: 215 30% 3%;
     --foreground: 0 0% 98%;
 
     /* Darker card backgrounds */
-    --card: 212 35% 6%;
+    --card: 217 30% 5%;
     --card-foreground: 0 0% 98%;
 
     --popover: 222 35% 6%;
@@ -67,24 +66,24 @@
     --accent: 35 95% 60%;
     --accent-foreground: 0 0% 98%;
 
-    --muted: 210 35% 10%;
+    --muted: 214 25% 10%;
     --muted-foreground: 210 20% 70%;
 
     --destructive: 0 95% 60%;
     --destructive-foreground: 0 0% 98%;
 
     /* Darker borders for better separation */
-    --border: 212 35% 10%;
-    --input: 212 35% 12%;
+    --border: 217 30% 12%;
+    --input: 217 30% 12%;
     --ring: 204 95% 65%;
 
-    --sidebar-background: 210 40% 5%;
+    --sidebar-background: 215 30% 5%;
     --sidebar-foreground: 240 5% 96%;
     --sidebar-primary: 204 95% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 212 35% 10%;
+    --sidebar-accent: 217 30% 10%;
     --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 212 35% 10%;
+    --sidebar-border: 217 30% 10%;
     --sidebar-ring: 217 95% 65%;
   }
 }
@@ -274,6 +273,21 @@
 }
 
 /* Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
 @keyframes pulse-subtle {
   0%, 100% {
     opacity: 1;
@@ -398,7 +412,7 @@
 .dark .glass-effect {
   background: rgba(10, 15, 25, 0.7);
   border: 1px solid rgba(52, 152, 219, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Enhanced Dark Mode Elements with neon effects */
@@ -458,18 +472,14 @@
   transform-origin: bottom left;
 }
 
-/* Enhanced modal styling */
+/* Enhanced modal styling with refined spacing */
 .modal-content {
-  @apply dark:bg-gray-900 dark:border-gray-800 rounded-xl;
+  @apply dark:bg-gray-900 dark:border-gray-800 rounded-xl my-auto;
+  max-height: 90vh;
 }
 
 .dark .modal-content {
   @apply shadow-[0_0_25px_rgba(0,0,0,0.5)] border border-calendoodle-blue/20;
-}
-
-/* Fixed header shadow in dark mode */
-.dark .fixed-header {
-  @apply shadow-[0_0_20px_rgba(0,0,0,0.3)] border-b border-gray-800/50;
 }
 
 /* Button hover effects */
@@ -479,4 +489,53 @@
 
 .dark .btn-hover-effect {
   @apply hover:shadow-[0_0_15px_rgba(52,152,219,0.5)];
+}
+
+/* Card hover effects with satisfying transitions */
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+}
+
+.dark .card-hover {
+  @apply hover:shadow-[0_5px_25px_rgba(52,152,219,0.3)] hover:border-calendoodle-blue/40;
+}
+
+/* macOS inspired dialog and card styles */
+.macos-card {
+  @apply bg-white dark:bg-gray-900/90 rounded-xl shadow-lg border-2 backdrop-blur-md;
+}
+
+.dark .macos-card {
+  @apply border-calendoodle-blue/20 shadow-[0_10px_30px_rgba(0,0,0,0.25)];
+}
+
+/* Enhanced scrollbar */
+.macos-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.macos-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
+
+.dark .macos-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-calendoodle-blue/40;
+}
+
+.dark .macos-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-calendoodle-blue/60;
+}
+
+/* Fix for footer spacing */
+.footer-container {
+  @apply w-full z-10 transition-all duration-500;
 }

@@ -134,7 +134,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
   return (
     <>
       {isMobile ? mobileView() : desktopView()}
-      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} transition-all duration-500`} />}
+      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} flex-shrink-0 transition-all duration-500`} />}
     </>
   );
 });
