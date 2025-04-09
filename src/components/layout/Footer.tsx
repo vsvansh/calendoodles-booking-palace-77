@@ -547,7 +547,7 @@ const Footer = () => {
   };
   
   return (
-    <footer className="bg-white dark:bg-gray-900/90 border-t dark:border-gray-800 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300 relative z-10">
+    <footer className="bg-white/90 dark:bg-gray-900/95 backdrop-blur-lg border-t dark:border-gray-800/70 py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-300 relative z-10 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_15px_rgba(0,0,0,0.2)]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
@@ -635,7 +635,7 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-gray-200 dark:border-gray-800/70 mt-6 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             &copy; {year} Calendoodles. All rights reserved.
           </p>

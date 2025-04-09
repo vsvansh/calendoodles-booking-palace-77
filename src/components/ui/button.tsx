@@ -10,16 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 dark:hover:shadow-[0_0_15px_rgba(52,152,219,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 dark:hover:shadow-[0_0_18px_rgba(52,152,219,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:hover:shadow-[0_0_15px_rgba(231,76,60,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:hover:shadow-[0_0_18px_rgba(231,76,60,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:border-gray-700 dark:hover:border-gray-600 transform-gpu hover:translate-y-[-1px]",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:shadow-[0_0_15px_rgba(52,152,219,0.4)] transform-gpu hover:translate-y-[-1px]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:hover:shadow-[0_0_15px_rgba(155,89,182,0.5)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
-        ghost: "hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
-        link: "text-primary underline-offset-4 hover:underline transition-all duration-200",
-        gradient: "bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground hover:from-primary hover:to-secondary dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:hover:shadow-[0_0_18px_rgba(155,89,182,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
+        ghost: "hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:hover:bg-gray-800/70 transform-gpu hover:translate-y-[-1px]",
+        link: "text-primary underline-offset-4 hover:underline transition-all duration-200 dark:text-calendoodle-blue dark:hover:text-calendoodle-blue/90 dark:hover:filter dark:hover:drop-shadow-[0_0_8px_rgba(52,152,219,0.8)]",
+        gradient: "bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground hover:from-primary hover:to-secondary dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.7)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px] dark:from-calendoodle-blue dark:to-calendoodle-purple dark:text-white",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -62,14 +62,14 @@ const AppLayout = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-500">
-      {/* Radial gradient for enhanced dark mode */}
-      <div className="dark:bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
-      <div className="dark:bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] dark:from-calendoodle-purple/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
+      {/* Enhanced radial gradients for dark mode */}
+      <div className="dark:bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/20 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
+      <div className="dark:bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] dark:from-calendoodle-purple/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
       {/* Fixed position navbar */}
       <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} sidebarOpen={showSidebar} />
       
-      <div className="flex flex-grow pt-16">
+      <div className="flex flex-grow pt-16 pb-20">
         {/* Sidebar with fixed position */}
         <div ref={sidebarRef} className="z-40">
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
@@ -84,9 +84,14 @@ const AppLayout = () => {
           <div className="flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full animate-fade-in">
             <Outlet />
           </div>
-          {/* Footer is inside the main element and respects sidebar width */}
-          <Footer />
         </main>
+      </div>
+      
+      {/* Fixed Footer */}
+      <div className={`fixed bottom-0 left-0 right-0 z-30 transition-all duration-500 ease-out ${
+        showSidebar ? 'ml-0 sm:ml-64' : 'ml-0 sm:ml-20'
+      }`}>
+        <Footer />
       </div>
     </div>
   );
