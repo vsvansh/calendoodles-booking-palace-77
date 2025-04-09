@@ -42,29 +42,46 @@ const AppLayout = () => {
   
   // Scroll to top on route change
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, [location.pathname]);
 
+  // Apply dark mode by default
+  useEffect(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    
+    // Set dark mode by default (unless explicitly set to light)
+    if (!savedTheme || savedTheme === 'dark' || (savedTheme === 'system' && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-300">
-      <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-500">
+      {/* Radial gradient for enhanced dark mode */}
+      <div className="dark:bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
+      <div className="dark:bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] dark:from-calendoodle-purple/10 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
       {/* Fixed position navbar */}
-      <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} />
+      <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} sidebarOpen={showSidebar} />
       
       <div className="flex flex-grow pt-16">
         {/* Sidebar with fixed position */}
-        <div ref={sidebarRef} className="z-30">
+        <div ref={sidebarRef} className="z-40">
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
         </div>
         
         {/* Main content area with adjusted margins */}
         <main 
-          className={`flex-grow z-10 transition-all duration-300 ease-in-out pb-20 pt-4 ${
+          className={`flex-grow z-10 transition-all duration-500 ease-out pb-20 pt-4 ${
             showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-20'
           }`}
         >
-          <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)]">
+          <div className="p-4 sm:p-6 max-w-[1800px] mx-auto min-h-[calc(100vh-11rem)] animate-fade-in">
             <Outlet />
           </div>
           <Footer />

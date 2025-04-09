@@ -12,7 +12,7 @@ export function ThemeToggle() {
       if (storedTheme) {
         return storedTheme === 'dark';
       }
-      // Default to dark mode instead of checking system preference
+      // Default to dark mode
       return true;
     }
     return true;
@@ -45,13 +45,13 @@ export function ThemeToggle() {
       variant="ghost" 
       size="icon" 
       onClick={toggleTheme} 
-      className="rounded-full transition-all duration-500 relative overflow-hidden hover:scale-110"
+      className="rounded-full transition-all duration-500 relative overflow-hidden hover:scale-110 active:scale-90"
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       <div className="relative z-10">
         {isDarkMode ? (
           <div className="relative">
-            <div className="absolute inset-0 bg-calendoodle-blue/30 dark:bg-calendoodle-blue rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-calendoodle-blue/30 dark:bg-calendoodle-blue rounded-full opacity-30 animate-pulse-glow"></div>
             <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
               <Stars className="h-3 w-3 absolute text-white opacity-70 animate-ping" style={{ top: '15%', left: '20%' }} />
               <Stars className="h-2 w-2 absolute text-white opacity-50 animate-ping" style={{ top: '40%', right: '25%', animationDelay: '0.5s' }} />
@@ -60,7 +60,7 @@ export function ThemeToggle() {
           </div>
         ) : (
           <div className="relative">
-            <div className="absolute inset-0 bg-calendoodle-orange/40 rounded-full opacity-20 animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-calendoodle-orange/40 rounded-full opacity-30 animate-pulse-glow"></div>
             <div className="absolute top-0 left-0 w-full h-full">
               <div className="absolute h-1.5 w-1.5 bg-yellow-200 rounded-full opacity-70 animate-ping" style={{ top: '15%', right: '25%' }}></div>
               <div className="absolute h-1 w-1 bg-yellow-200 rounded-full opacity-50 animate-ping" style={{ bottom: '20%', left: '25%', animationDelay: '0.7s' }}></div>

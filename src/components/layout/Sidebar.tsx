@@ -53,14 +53,17 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
               <TooltipTrigger asChild>
                 <Link
                   to={item.href}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg group transition-all duration-300
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl group transition-all duration-300
                   ${isActive 
                     ? 'bg-calendoodle-purple/20 text-calendoodle-purple dark:bg-calendoodle-purple/30 dark:text-white' 
-                    : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-200 dark:hover:text-white'}`}
+                    : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-300 dark:hover:text-white'}`}
                   onClick={() => {
                     if (isMobile) setIsOpen(false);
                     // Scroll to top when navigating
-                    window.scrollTo(0, 0);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
                   }}
                 >
                   <IconComponent 
@@ -102,16 +105,16 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
   const desktopView = () => (
     <div
       ref={ref}
-      className={`fixed z-20 ${
+      className={`fixed z-30 ${
         isOpen ? 'w-64' : 'w-20'
-      } left-0 inset-y-0 bg-white dark:bg-gray-950 border-r dark:border-gray-800 h-screen pt-16 dark:shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out`}
+      } left-0 top-16 bottom-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-r dark:border-gray-800 h-[calc(100vh-4rem)] dark:shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-all duration-500 ease-in-out`}
     >
       <div className="flex items-center justify-end px-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className="h-6 w-6 absolute -right-3 top-[74px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50 hover:shadow-md dark:hover:shadow-[0_0_8px_rgba(52,152,219,0.5)] transition-all duration-300"
+          className="h-7 w-7 absolute -right-3.5 top-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50 hover:shadow-md dark:hover:shadow-[0_0_8px_rgba(52,152,219,0.5)] transition-all duration-300"
           aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
           {isOpen ? (
@@ -123,7 +126,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
       </div>
       
       <ScrollArea className="h-full py-4 scrollbar-thin">
-        <div className="px-3 pb-16 pt-2">{renderNavItems()}</div>
+        <div className="px-3 pb-16 pt-6">{renderNavItems()}</div>
       </ScrollArea>
     </div>
   );
@@ -131,7 +134,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
   return (
     <>
       {isMobile ? mobileView() : desktopView()}
-      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} transition-all duration-300`} />}
+      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} transition-all duration-500`} />}
     </>
   );
 });
