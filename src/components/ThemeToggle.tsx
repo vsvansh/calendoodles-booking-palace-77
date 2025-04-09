@@ -29,6 +29,13 @@ export function ThemeToggle() {
     }
   }, [isDarkMode]);
 
+  // Set dark mode on initial load
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+    setIsDarkMode(true);
+  }, []);
+
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -38,7 +45,7 @@ export function ThemeToggle() {
       variant="ghost" 
       size="icon" 
       onClick={toggleTheme} 
-      className="rounded-full transition-all duration-500 relative overflow-hidden"
+      className="rounded-full transition-all duration-500 relative overflow-hidden hover:scale-110"
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       <div className="relative z-10">
@@ -49,7 +56,7 @@ export function ThemeToggle() {
               <Stars className="h-3 w-3 absolute text-white opacity-70 animate-ping" style={{ top: '15%', left: '20%' }} />
               <Stars className="h-2 w-2 absolute text-white opacity-50 animate-ping" style={{ top: '40%', right: '25%', animationDelay: '0.5s' }} />
             </div>
-            <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue dark:text-white" />
+            <Moon className="h-5 w-5 transition-transform rotate-0 scale-100 text-calendoodle-blue dark:text-white filter drop-shadow-[0_0_5px_rgba(52,152,219,0.8)]" />
           </div>
         ) : (
           <div className="relative">

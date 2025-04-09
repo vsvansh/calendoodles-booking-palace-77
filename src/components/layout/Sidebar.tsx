@@ -16,8 +16,6 @@ import {
   CreditCard,
   BarChart3,
   User,
-  PanelLeftClose,
-  PanelLeftOpen,
   ChevronRight
 } from 'lucide-react';
 
@@ -55,14 +53,27 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
               <TooltipTrigger asChild>
                 <Link
                   to={item.href}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg group transition-all 
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg group transition-all duration-300
                   ${isActive 
                     ? 'bg-calendoodle-purple/20 text-calendoodle-purple dark:bg-calendoodle-purple/30 dark:text-white' 
                     : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-200 dark:hover:text-white'}`}
-                  onClick={() => isMobile && setIsOpen(false)}
+                  onClick={() => {
+                    if (isMobile) setIsOpen(false);
+                    // Scroll to top when navigating
+                    window.scrollTo(0, 0);
+                  }}
                 >
-                  <IconComponent className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300 ${isActive ? 'text-calendoodle-purple dark:text-calendoodle-blue' : ''}`} aria-hidden="true" />
-                  {(isOpen || isMobile) && <span className="truncate transition-all duration-300">{item.name}</span>}
+                  <IconComponent 
+                    className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 
+                    group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 
+                    ${isActive ? 'text-calendoodle-purple dark:text-calendoodle-blue dark:drop-shadow-[0_0_8px_rgba(52,152,219,0.8)]' : ''}`} 
+                    aria-hidden="true" 
+                  />
+                  {(isOpen || isMobile) && (
+                    <span className="truncate transition-all duration-300">
+                      {item.name}
+                    </span>
+                  )}
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className={isOpen ? "hidden" : ""}>
@@ -77,7 +88,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
 
   const mobileView = () => (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-950 dark:border-gray-800">
+      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-950 dark:border-gray-800 dark:shadow-[0_0_25px_rgba(0,0,0,0.3)]">
         <ScrollArea className="h-full py-4 scrollbar-thin">
           <div className="px-3 pb-16 pt-2">
             {renderNavItems()}
@@ -93,20 +104,20 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
       ref={ref}
       className={`fixed z-20 ${
         isOpen ? 'w-64' : 'w-20'
-      } left-0 inset-y-0 bg-white dark:bg-gray-950 border-r dark:border-gray-800 h-screen pt-16 shadow-sm transition-all duration-300 ease-in-out`}
+      } left-0 inset-y-0 bg-white dark:bg-gray-950 border-r dark:border-gray-800 h-screen pt-16 dark:shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-all duration-300 ease-in-out`}
     >
       <div className="flex items-center justify-end px-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsOpen(!isOpen)}
-          className="h-6 w-6 absolute -right-3 top-[74px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50"
+          className="h-6 w-6 absolute -right-3 top-[74px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50 hover:shadow-md dark:hover:shadow-[0_0_8px_rgba(52,152,219,0.5)] transition-all duration-300"
           aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
           {isOpen ? (
-            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-300 hover:scale-110" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 rotate-180" />
+            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 rotate-180 transition-transform duration-300 hover:scale-110" />
           )}
         </Button>
       </div>

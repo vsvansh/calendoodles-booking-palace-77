@@ -46,42 +46,46 @@
   }
 
   .dark {
-    --background: 210 35% 6%;
+    /* Darker background for better contrast */
+    --background: 210 40% 3%;
     --foreground: 0 0% 98%;
 
-    --card: 212 30% 10%;
+    /* Darker card backgrounds */
+    --card: 212 35% 6%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 222 25% 12%;
+    --popover: 222 35% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 204 85% 65%;
+    /* More vibrant neon colors */
+    --primary: 204 95% 65%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 282 70% 65%;
+    --secondary: 282 80% 65%;
     --secondary-foreground: 0 0% 98%;
 
     --accent: 35 95% 60%;
     --accent-foreground: 0 0% 98%;
 
-    --muted: 210 30% 18%;
+    --muted: 210 35% 10%;
     --muted-foreground: 210 20% 70%;
 
-    --destructive: 0 90% 60%;
+    --destructive: 0 95% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 212 30% 15%;
-    --input: 212 30% 18%;
-    --ring: 204 85% 65%;
+    /* Darker borders for better separation */
+    --border: 212 35% 10%;
+    --input: 212 35% 12%;
+    --ring: 204 95% 65%;
 
-    --sidebar-background: 210 35% 8%;
+    --sidebar-background: 210 40% 5%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 204 85% 60%;
+    --sidebar-primary: 204 95% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 212 28% 14%;
+    --sidebar-accent: 212 35% 10%;
     --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 212 28% 15%;
-    --sidebar-ring: 217 91% 65%;
+    --sidebar-border: 212 35% 10%;
+    --sidebar-ring: 217 95% 65%;
   }
 }
 
@@ -104,6 +108,11 @@
   
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply bg-calendoodle-blue/40 hover:bg-calendoodle-blue/60;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -140,28 +149,31 @@
     @apply bg-gradient-to-br from-background to-card/80 backdrop-blur-sm dark:from-gray-800/80 dark:to-gray-900/90 dark:backdrop-blur-sm;
   }
 
+  /* Enhanced card hover effects */
   .glow-card {
-    @apply dark:shadow-[0_0_25px_rgba(52,152,219,0.2)] hover:shadow-md dark:hover:shadow-[0_0_35px_rgba(52,152,219,0.35)] transition-all duration-300;
+    @apply dark:shadow-[0_0_25px_rgba(52,152,219,0.2)] hover:shadow-md dark:hover:shadow-[0_0_35px_rgba(52,152,219,0.35)] transition-all duration-300 hover:translate-y-[-5px];
   }
 
+  /* Enhanced neon shadows */
   .dark .shadow-glow-blue {
-    @apply shadow-[0_0_25px_rgba(52,152,219,0.4)];
+    @apply shadow-[0_0_30px_rgba(52,152,219,0.5)];
   }
   
   .dark .shadow-glow-purple {
-    @apply shadow-[0_0_25px_rgba(155,89,182,0.4)];
+    @apply shadow-[0_0_30px_rgba(155,89,182,0.5)];
   }
   
   .dark .shadow-glow-orange {
-    @apply shadow-[0_0_25px_rgba(243,156,18,0.4)];
+    @apply shadow-[0_0_30px_rgba(243,156,18,0.5)];
   }
   
   .dark .shadow-glow-green {
-    @apply shadow-[0_0_25px_rgba(46,204,113,0.4)];
+    @apply shadow-[0_0_30px_rgba(46,204,113,0.5)];
   }
   
+  /* Enhanced feature card hover effects */
   .dark .feature-card {
-    @apply backdrop-blur-md bg-gray-800/50 border border-gray-700/50 hover:border-calendoodle-blue/40 transition-all duration-300;
+    @apply backdrop-blur-md bg-gray-800/50 border border-gray-700/50 hover:border-calendoodle-blue/40 transition-all duration-300 hover:shadow-[0_0_25px_rgba(52,152,219,0.3)] hover:translate-y-[-5px];
   }
   
   .dark .glass-effect {
@@ -206,7 +218,7 @@
     @apply bg-gray-300 hover:bg-gray-400 rounded-full;
   }
   
-  /* New neon-styled elements for dark mode */
+  /* Enhanced neon-styled elements for dark mode */
   .dark .neon-border {
     @apply border border-transparent relative;
   }
@@ -229,24 +241,35 @@
     animation: pulse-text 3s ease-in-out infinite;
   }
   
+  /* Enhanced neon text effects */
   .dark .neon-blue {
     @apply text-calendoodle-blue;
-    filter: brightness(1.2) drop-shadow(0 0 5px rgba(52, 152, 219, 0.8));
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(52, 152, 219, 0.8));
   }
   
   .dark .neon-purple {
     @apply text-calendoodle-purple;
-    filter: brightness(1.2) drop-shadow(0 0 5px rgba(155, 89, 182, 0.8));
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(155, 89, 182, 0.8));
   }
   
   .dark .neon-orange {
     @apply text-calendoodle-orange;
-    filter: brightness(1.2) drop-shadow(0 0 5px rgba(243, 156, 18, 0.8));
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(243, 156, 18, 0.8));
   }
 
-  /* Enhanced card hover */
+  /* Enhanced card hover effects with neon glow */
   .interactive-card {
     @apply transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-glow-blue;
+  }
+
+  /* Enhanced button hover effects in dark mode */
+  .dark .button-hover-glow {
+    @apply hover:shadow-[0_0_15px_rgba(52,152,219,0.5)] transition-all duration-300 hover:scale-105;
+  }
+
+  /* Modal spacing */
+  .modal-spacing {
+    @apply my-4 max-h-[80vh] overflow-y-auto;
   }
 }
 
@@ -312,70 +335,148 @@
   }
 }
 
-/* Dark mode specific styles */
+/* Enhanced card animations */
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(52, 152, 219, 0.5);
+  }
+}
+
+.animate-card-glow {
+  animation: card-glow 3s ease-in-out infinite;
+}
+
+/* Enhanced button animations */
+@keyframes button-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-button-pulse {
+  animation: button-pulse 2s ease-in-out infinite;
+}
+
+/* Dark mode specific styles with enhanced neon effects */
 .dark .calendoodle-card {
-  background: linear-gradient(to bottom right, rgba(26, 32, 44, 0.9), rgba(15, 23, 42, 0.9));
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom right, rgba(20, 24, 30, 0.95), rgba(10, 15, 25, 0.95));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(52, 152, 219, 0.2);
 }
 
 .dark .hero-gradient {
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.3) 0%, rgba(155, 89, 182, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.4) 0%, rgba(155, 89, 182, 0.4) 100%);
 }
 
 .dark .glow-text {
-  text-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+  text-shadow: 0 0 15px rgba(52, 152, 219, 0.8);
 }
 
-/* Feature card hover effects */
+/* Enhanced feature card hover effects */
 .feature-card {
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.01);
 }
 
-/* Glass morphism effects */
+/* Enhanced glass morphism effects */
 .glass-effect {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dark .glass-effect {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 15, 25, 0.7);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Enhanced Dark Mode Elements */
+/* Enhanced Dark Mode Elements with neon effects */
 .dark .neo-blur {
-  @apply backdrop-blur-xl bg-black/50 border border-white/10;
+  @apply backdrop-blur-xl bg-black/50 border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)];
 }
 
 .dark .glass-panel {
-  @apply bg-gray-900/50 backdrop-blur-lg border border-calendoodle-blue/20 shadow-xl transition-all duration-300;
+  @apply bg-gray-900/50 backdrop-blur-lg border border-calendoodle-blue/30 shadow-xl transition-all duration-300 hover:border-calendoodle-blue/50 hover:shadow-[0_0_25px_rgba(52,152,219,0.3)];
 }
 
 .dark .frosted-panel {
-  background: rgba(17, 25, 40, 0.7);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(52, 152, 219, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  background: rgba(10, 15, 20, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 .dark .text-glow {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
 }
 
+/* Enhanced neon glow effects */
 .dark .blue-glow {
-  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.7));
+  filter: drop-shadow(0 0 12px rgba(52, 152, 219, 0.8));
 }
 
 .dark .purple-glow {
-  filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.7));
+  filter: drop-shadow(0 0 12px rgba(155, 89, 182, 0.8));
 }
 
 .dark .orange-glow {
-  filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.7));
+  filter: drop-shadow(0 0 12px rgba(243, 156, 18, 0.8));
+}
+
+/* Navigation link hover effect */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+  @apply dark:shadow-[0_0_8px_rgba(52,152,219,0.8)];
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Enhanced modal styling */
+.modal-content {
+  @apply dark:bg-gray-900 dark:border-gray-800 rounded-xl;
+}
+
+.dark .modal-content {
+  @apply shadow-[0_0_25px_rgba(0,0,0,0.5)] border border-calendoodle-blue/20;
+}
+
+/* Fixed header shadow in dark mode */
+.dark .fixed-header {
+  @apply shadow-[0_0_20px_rgba(0,0,0,0.3)] border-b border-gray-800/50;
+}
+
+/* Button hover effects */
+.btn-hover-effect {
+  @apply transition-all duration-300 hover:scale-105;
+}
+
+.dark .btn-hover-effect {
+  @apply hover:shadow-[0_0_15px_rgba(52,152,219,0.5)];
 }

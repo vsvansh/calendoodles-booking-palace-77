@@ -49,15 +49,18 @@ const AppLayout = () => {
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-300">
       <div className="dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-calendoodle-blue/15 dark:via-transparent dark:to-transparent fixed inset-0 z-0 pointer-events-none"></div>
       
+      {/* Fixed position navbar */}
       <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} />
       
       <div className="flex flex-grow pt-16">
-        <div ref={sidebarRef} className="z-20">
+        {/* Sidebar with fixed position */}
+        <div ref={sidebarRef} className="z-30">
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
         </div>
         
+        {/* Main content area with adjusted margins */}
         <main 
-          className={`flex-grow z-10 transition-all duration-300 ease-in-out pb-20 ${
+          className={`flex-grow z-10 transition-all duration-300 ease-in-out pb-20 pt-4 ${
             showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-20'
           }`}
         >
