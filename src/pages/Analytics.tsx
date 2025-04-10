@@ -1,8 +1,10 @@
+
 import { useState } from 'react';
 import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight, Calendar as CalendarIcon, Users } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import { useToast } from '@/hooks/use-toast';
 import AnalyticsChartCard from '@/components/analytics/AnalyticsChartCard';
 
@@ -103,6 +105,8 @@ const activityData = [
 const Analytics = () => {
   const { toast } = useToast();
   const [activityTabValue, setActivityTabValue] = useState('all');
+  const [revenueTimeframe, setRevenueTimeframe] = useState('monthly');
+  const [bookingsTimeframe, setBookingsTimeframe] = useState('monthly');
 
   const filteredActivity = activityTabValue === 'all' 
     ? activityData 
@@ -136,6 +140,19 @@ const Analytics = () => {
         return <Icon className="h-5 w-5 text-calendoodle-green" />;
       default:
         return <Activity className="h-5 w-5 text-calendoodle-orange" />;
+    }
+  };
+
+  const getChartDataKey = (timeframe: string): string => {
+    switch (timeframe) {
+      case 'weekly':
+        return 'day';
+      case 'monthly':
+        return 'month';
+      case 'yearly':
+        return 'year';
+      default:
+        return 'month';
     }
   };
 
@@ -211,34 +228,100 @@ const Analytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AnalyticsChartCard
-          title="Revenue"
-          description="Monthly revenue breakdown"
-          icon={<LineChartIcon className="h-5 w-5 text-calendoodle-blue" />}
-          chartType="line"
-          data={revenueData}
-          dataKeys={{
-            name: 'month',
-            keys: [
-              { key: 'revenue', name: 'Revenue ($)', color: '#3B82F6' }
-            ]
-          }}
-        />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+              <LineChartIcon className="h-5 w-5 text-calendoodle-blue" />
+              <span>Revenue</span>
+            </h2>
+            <ButtonGroup>
+              <Button 
+                variant={revenueTimeframe === 'weekly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setRevenueTimeframe('weekly')}
+                className="text-xs px-3"
+              >
+                Weekly
+              </Button>
+              <Button 
+                variant={revenueTimeframe === 'monthly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setRevenueTimeframe('monthly')}
+                className="text-xs px-3"
+              >
+                Monthly
+              </Button>
+              <Button 
+                variant={revenueTimeframe === 'yearly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setRevenueTimeframe('yearly')}
+                className="text-xs px-3"
+              >
+                Yearly
+              </Button>
+            </ButtonGroup>
+          </div>
+          <AnalyticsChartCard
+            title=""
+            description=""
+            chartType="line"
+            data={revenueData[revenueTimeframe as keyof typeof revenueData]}
+            dataKeys={{
+              name: getChartDataKey(revenueTimeframe),
+              keys: [
+                { key: 'revenue', name: 'Revenue ($)', color: '#3B82F6' }
+              ]
+            }}
+          />
+        </div>
 
-        <AnalyticsChartCard
-          title="Bookings"
-          description="Completed vs. cancelled appointments"
-          icon={<BarChart3 className="h-5 w-5 text-calendoodle-purple" />}
-          chartType="bar"
-          data={bookingsData}
-          dataKeys={{
-            name: 'month',
-            keys: [
-              { key: 'completed', name: 'Completed', color: '#10B981' },
-              { key: 'cancelled', name: 'Cancelled', color: '#EF4444' }
-            ]
-          }}
-        />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-calendoodle-purple" />
+              <span>Bookings</span>
+            </h2>
+            <ButtonGroup>
+              <Button 
+                variant={bookingsTimeframe === 'weekly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setBookingsTimeframe('weekly')}
+                className="text-xs px-3"
+              >
+                Weekly
+              </Button>
+              <Button 
+                variant={bookingsTimeframe === 'monthly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setBookingsTimeframe('monthly')}
+                className="text-xs px-3"
+              >
+                Monthly
+              </Button>
+              <Button 
+                variant={bookingsTimeframe === 'yearly' ? 'default' : 'outline'} 
+                size="sm" 
+                onClick={() => setBookingsTimeframe('yearly')}
+                className="text-xs px-3"
+              >
+                Yearly
+              </Button>
+            </ButtonGroup>
+          </div>
+          <AnalyticsChartCard
+            title=""
+            description=""
+            chartType="bar"
+            data={bookingsData[bookingsTimeframe as keyof typeof bookingsData]}
+            dataKeys={{
+              name: getChartDataKey(bookingsTimeframe),
+              keys: [
+                { key: 'completed', name: 'Completed', color: '#10B981' },
+                { key: 'cancelled', name: 'Cancelled', color: '#EF4444' }
+              ]
+            }}
+          />
+        </div>
       </div>
 
       <Card>

@@ -11,6 +11,7 @@ const AppLayout = () => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const location = useLocation();
+  const [fadeIn, setFadeIn] = useState(false);
   
   // Close the sidebar on mobile when clicking outside
   useOnClickOutside(sidebarRef, () => {
@@ -39,12 +40,16 @@ const AppLayout = () => {
     }
   }, [showSidebar, isMobile]);
   
-  // Scroll to top on route change
+  // Scroll to top and trigger fade animation on route change
   useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+    
+    // Reset and trigger fade animation
+    setFadeIn(false);
+    setTimeout(() => setFadeIn(true), 50);
   }, [location.pathname]);
 
   return (
@@ -68,7 +73,9 @@ const AppLayout = () => {
             showSidebar ? 'pl-0 sm:pl-64' : 'pl-0 sm:pl-20'
           }`}
         >
-          <div className="flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full animate-fade-in">
+          <div 
+            className={`flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full ${fadeIn ? 'animate-fade-in opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          >
             <Outlet />
           </div>
         </main>

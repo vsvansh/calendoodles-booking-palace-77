@@ -18,7 +18,7 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
         {React.Children.map(props.children, (child) => {
           // Check if child is a valid React element
           if (React.isValidElement(child)) {
-            // Use spread to properly merge existing props with new ones
+            // Create a properly typed clone with merged props
             return React.cloneElement(child, {
               ...child.props,
               // Override button styles to fit in a group
