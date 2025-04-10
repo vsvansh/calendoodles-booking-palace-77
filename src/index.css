@@ -1,541 +1,80 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --background: 44 30% 98%;
-    --foreground: 210 29% 24%;
-
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
-    --card-foreground: 210 29% 24%;
-
+    --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 29% 24%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
 
-    --primary: 204 70% 53%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 282 39% 53%;
-    --secondary-foreground: 0 0% 98%;
-
-    --accent: 35 90% 52%;
-    --accent-foreground: 0 0% 98%;
-
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 204 70% 53%;
-
-    --radius: 1rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5% 26%;
-    --sidebar-primary: 240 6% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 240 6% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --calendoodle-blue: 221.2 83.2% 53.3%;
+    --calendoodle-purple: 262 83.3% 67.8%;
+    --calendoodle-green: 142.1 76.2% 36.3%;
+    --calendoodle-orange: 24.6 95% 53.1%;
   }
 
   .dark {
-    /* Enhanced darker background for better contrast */
-    --background: 222 47% 4%;
-    --foreground: 0 0% 98%;
-
-    /* Darker card backgrounds with slight blue tint */
-    --card: 224 45% 4%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 222 45% 5%;
-    --popover-foreground: 0 0% 98%;
-
-    /* More vibrant neon colors */
-    --primary: 204 100% 70%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 282 85% 70%;
-    --secondary-foreground: 0 0% 98%;
-
-    --accent: 35 100% 65%;
-    --accent-foreground: 0 0% 98%;
-
-    --muted: 214 30% 10%;
-    --muted-foreground: 210 25% 75%;
-
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 0 0% 98%;
-
-    /* Darker borders for better separation with glow effect */
-    --border: 217 35% 12%;
-    --input: 217 35% 12%;
-    --ring: 204 100% 70%;
-
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 204 100% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 35% 10%;
-    --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 217 35% 10%;
-    --sidebar-ring: 217 100% 65%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 40% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground antialiased;
-  }
-  
-  ::selection {
-    @apply bg-calendoodle-blue/30 dark:bg-calendoodle-blue/60;
-  }
-
-  .dark .scrollbar-thin::-webkit-scrollbar-track {
-    @apply bg-gray-800/50;
-  }
-  
-  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-calendoodle-blue/40 hover:bg-calendoodle-blue/60;
-  }
-
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  .calendoodle-card {
-    @apply bg-white dark:bg-gray-900/90 rounded-2xl shadow-lg p-6 border-2 border-calendoodle-blue/20 dark:border-calendoodle-blue/20 hover:shadow-xl transition-all duration-300 backdrop-blur-sm dark:backdrop-blur-md transform hover:scale-[1.01] hover:dark:shadow-glow-blue;
-  }
-  
-  .calendoodle-btn {
-    @apply rounded-full px-6 py-2 font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-md;
-  }
-  
-  .calendoodle-btn-primary {
-    @apply bg-calendoodle-blue text-white hover:bg-calendoodle-blue/90 dark:hover:bg-calendoodle-blue/80 dark:shadow-glow-blue;
-  }
-  
-  .calendoodle-btn-secondary {
-    @apply bg-calendoodle-purple text-white hover:bg-calendoodle-purple/90 dark:hover:bg-calendoodle-purple/80 dark:shadow-glow-purple;
-  }
-  
-  .calendoodle-btn-accent {
-    @apply bg-calendoodle-orange text-white hover:bg-calendoodle-orange/90 dark:hover:bg-calendoodle-orange/80 dark:shadow-glow-orange;
-  }
-  
-  .calendoodle-input {
-    @apply rounded-xl border-2 border-gray-200 dark:border-gray-700 px-4 py-2 focus:border-calendoodle-blue focus:ring-2 focus:ring-calendoodle-blue/30 focus:outline-none transition-all duration-200 bg-white dark:bg-gray-800;
-  }
-  
-  .calendoodle-icon {
-    @apply hover:text-calendoodle-blue transition-colors duration-200;
-  }
-
-  .card-gradient {
-    @apply bg-gradient-to-br from-background to-card/80 backdrop-blur-sm dark:from-gray-800/80 dark:to-gray-900/90 dark:backdrop-blur-sm;
-  }
-
-  /* Enhanced card hover effects */
-  .glow-card {
-    @apply dark:shadow-[0_0_25px_rgba(52,152,219,0.2)] hover:shadow-md dark:hover:shadow-[0_0_35px_rgba(52,152,219,0.35)] transition-all duration-300 hover:translate-y-[-5px];
-  }
-
-  /* Enhanced neon shadows */
-  .dark .shadow-glow-blue {
-    @apply shadow-[0_0_30px_rgba(52,152,219,0.5)];
-  }
-  
-  .dark .shadow-glow-purple {
-    @apply shadow-[0_0_30px_rgba(155,89,182,0.5)];
-  }
-  
-  .dark .shadow-glow-orange {
-    @apply shadow-[0_0_30px_rgba(243,156,18,0.5)];
-  }
-  
-  .dark .shadow-glow-green {
-    @apply shadow-[0_0_30px_rgba(46,204,113,0.5)];
-  }
-  
-  /* Enhanced feature card hover effects */
-  .dark .feature-card {
-    @apply backdrop-blur-md bg-gray-800/50 border border-gray-700/50 hover:border-calendoodle-blue/40 transition-all duration-300 hover:shadow-[0_0_25px_rgba(52,152,219,0.3)] hover:translate-y-[-5px];
-  }
-  
-  .dark .glass-effect {
-    @apply backdrop-blur-lg bg-gray-900/40 border border-gray-700/50 transition-all duration-300;
-  }
-
-  /* Enhanced Dropdowns in Dark Mode */
-  .dark [data-radix-popper-content-wrapper] {
-    @apply !bg-transparent;
-  }
-  
-  .dark .dropdown-content,
-  .dark [role="menu"],
-  .dark [role="listbox"] {
-    @apply bg-gray-800/90 border border-gray-700/80 shadow-lg shadow-black/30 backdrop-blur-lg;
-  }
-  
-  /* Enhanced Buttons in Dark Mode */
-  .dark button {
-    @apply transition-all duration-300;
-  }
-  
-  .dark .primary-button-gradient {
-    @apply bg-gradient-to-r from-calendoodle-blue to-calendoodle-purple hover:from-calendoodle-blue/90 hover:to-calendoodle-purple/90 transition-all duration-300;
-  }
-  
-  /* Scrollbars */
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar {
-    @apply w-1.5 h-1.5;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-track {
-    @apply bg-gray-100;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 hover:bg-gray-400 rounded-full;
-  }
-  
-  /* Enhanced neon-styled elements for dark mode */
-  .dark .neon-border {
-    @apply border border-transparent relative;
-  }
-  
-  .dark .neon-border::before {
-    content: "";
-    @apply absolute inset-0 border border-transparent rounded-lg;
-    background: linear-gradient(90deg, #3498db, #9b59b6, #f39c12, #3498db);
-    background-size: 400% 400%;
-    animation: border-flow 8s ease-in-out infinite;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-  
-  .dark .neon-text {
-    @apply font-semibold relative;
-    text-shadow: 0 0 10px rgba(52, 152, 219, 0.8);
-    animation: pulse-text 3s ease-in-out infinite;
-  }
-  
-  /* Enhanced neon text effects */
-  .dark .neon-blue {
-    @apply text-calendoodle-blue;
-    filter: brightness(1.2) drop-shadow(0 0 8px rgba(52, 152, 219, 0.8));
-  }
-  
-  .dark .neon-purple {
-    @apply text-calendoodle-purple;
-    filter: brightness(1.2) drop-shadow(0 0 8px rgba(155, 89, 182, 0.8));
-  }
-  
-  .dark .neon-orange {
-    @apply text-calendoodle-orange;
-    filter: brightness(1.2) drop-shadow(0 0 8px rgba(243, 156, 18, 0.8));
-  }
-
-  /* Enhanced card hover effects with neon glow */
-  .interactive-card {
-    @apply transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-glow-blue;
-  }
-
-  /* Enhanced button hover effects in dark mode */
-  .dark .button-hover-glow {
-    @apply hover:shadow-[0_0_15px_rgba(52,152,219,0.5)] transition-all duration-300 hover:scale-105;
-  }
-
-  /* Modal spacing */
-  .modal-spacing {
-    @apply my-4 max-h-[80vh] overflow-y-auto;
-  }
-}
-
-/* Animations */
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-subtle {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-.animate-float {
-  animation: float 5s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
-
-@keyframes slide-up {
-  0% {
-    transform: translateY(10px);
+@keyframes fadeIn {
+  from {
     opacity: 0;
+    transform: translateY(10px);
   }
-  100% {
+  to {
+    opacity: 1;
     transform: translateY(0);
-    opacity: 1;
   }
 }
 
-@keyframes border-flow {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes pulse-text {
-  0%, 100% {
-    text-shadow: 0 0 8px rgba(52, 152, 219, 0.8);
-    opacity: 1;
-  }
-  50% {
-    text-shadow: 0 0 15px rgba(52, 152, 219, 1);
-    opacity: 0.95;
-  }
-}
-
-/* Enhanced card animations */
-@keyframes card-glow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(52, 152, 219, 0.5);
-  }
-}
-
-.animate-card-glow {
-  animation: card-glow 3s ease-in-out infinite;
-}
-
-/* Enhanced button animations */
-@keyframes button-pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.animate-button-pulse {
-  animation: button-pulse 2s ease-in-out infinite;
-}
-
-/* Dark mode specific styles with enhanced neon effects */
-.dark .calendoodle-card {
-  background: linear-gradient(to bottom right, rgba(20, 24, 30, 0.95), rgba(10, 15, 25, 0.95));
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(52, 152, 219, 0.2);
-}
-
-.dark .hero-gradient {
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.4) 0%, rgba(155, 89, 182, 0.4) 100%);
-}
-
-.dark .glow-text {
-  text-shadow: 0 0 15px rgba(52, 152, 219, 0.8);
-}
-
-/* Enhanced feature card hover effects */
-.feature-card {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.feature-card:hover {
-  transform: translateY(-8px) scale(1.01);
-}
-
-/* Enhanced glass morphism effects */
-.glass-effect {
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.dark .glass-effect {
-  background: rgba(10, 15, 25, 0.7);
-  border: 1px solid rgba(52, 152, 219, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-}
-
-/* Enhanced Dark Mode Elements with neon effects */
-.dark .neo-blur {
-  @apply backdrop-blur-xl bg-black/50 border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)];
-}
-
-.dark .glass-panel {
-  @apply bg-gray-900/50 backdrop-blur-lg border border-calendoodle-blue/30 shadow-xl transition-all duration-300 hover:border-calendoodle-blue/50 hover:shadow-[0_0_25px_rgba(52,152,219,0.3)];
-}
-
-.dark .frosted-panel {
-  background: rgba(10, 15, 20, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(52, 152, 219, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-}
-
-.dark .text-glow {
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-}
-
-/* Enhanced neon glow effects */
-.dark .blue-glow {
-  filter: drop-shadow(0 0 12px rgba(52, 152, 219, 0.8));
-}
-
-.dark .purple-glow {
-  filter: drop-shadow(0 0 12px rgba(155, 89, 182, 0.8));
-}
-
-.dark .orange-glow {
-  filter: drop-shadow(0 0 12px rgba(243, 156, 18, 0.8));
-}
-
-/* Navigation link hover effect */
-.nav-link {
-  position: relative;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: -2px;
-  left: 0;
-  background: linear-gradient(90deg, #3498db, #9b59b6);
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform 0.3s ease-out;
-  @apply dark:shadow-[0_0_8px_rgba(52,152,219,0.8)];
-}
-
-.nav-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* Enhanced modal styling with refined spacing */
-.modal-content {
-  @apply dark:bg-gray-900 dark:border-gray-800 rounded-xl my-auto;
-  max-height: 90vh;
-}
-
-.dark .modal-content {
-  @apply shadow-[0_0_25px_rgba(0,0,0,0.5)] border border-calendoodle-blue/20;
-}
-
-/* Button hover effects */
-.btn-hover-effect {
-  @apply transition-all duration-300 hover:scale-105;
-}
-
-.dark .btn-hover-effect {
-  @apply hover:shadow-[0_0_15px_rgba(52,152,219,0.5)];
-}
-
-/* Card hover effects with satisfying transitions */
-.card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
-}
-
-.dark .card-hover {
-  @apply hover:shadow-[0_5px_25px_rgba(52,152,219,0.3)] hover:border-calendoodle-blue/40;
-}
-
-/* macOS inspired dialog and card styles */
-.macos-card {
-  @apply bg-white dark:bg-gray-900/90 rounded-xl shadow-lg border-2 backdrop-blur-md;
-}
-
-.dark .macos-card {
-  @apply border-calendoodle-blue/20 shadow-[0_10px_30px_rgba(0,0,0,0.25)];
-}
-
-/* Enhanced scrollbar */
-.macos-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.macos-scrollbar::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-.macos-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
-}
-
-.macos-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-600;
-}
-
-.dark .macos-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-calendoodle-blue/40;
-}
-
-.dark .macos-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-calendoodle-blue/60;
-}
-
-/* Fix for footer spacing */
-.footer-container {
-  @apply w-full z-10 transition-all duration-500;
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
 }

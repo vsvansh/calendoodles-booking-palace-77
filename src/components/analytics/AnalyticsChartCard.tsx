@@ -8,15 +8,11 @@ import { Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface AnalyticsChartCardProps {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
+  title?: string;
+  description?: string;
+  icon?: React.ReactNode;
   chartType: 'line' | 'bar';
-  data: {
-    weekly: any[];
-    monthly: any[];
-    yearly: any[];
-  };
+  data: any[];
   dataKeys: {
     name: string;
     keys: { key: string; name: string; color: string }[];
@@ -32,55 +28,28 @@ const AnalyticsChartCard = ({
   dataKeys 
 }: AnalyticsChartCardProps) => {
   const { toast } = useToast();
-  const [period, setPeriod] = useState<'weekly' | 'monthly' | 'yearly'>('monthly');
   
   const handleViewReport = () => {
     toast({
-      title: `Viewing ${title} Report`,
-      description: `The detailed ${title.toLowerCase()} report is being prepared.`,
+      title: `Viewing ${title || 'Chart'} Report`,
+      description: `The detailed ${title?.toLowerCase() || 'chart'} report is being prepared.`,
     });
   };
   
-  const currentData = data[period];
-  
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              {icon}
-              <span>{title}</span>
-            </CardTitle>
-            <CardDescription>{description}</CardDescription>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <ButtonGroup className="mb-2 sm:mb-0">
-              <Button
-                variant="outline"
-                size="sm"
-                className={period === 'weekly' ? 'bg-gray-100 dark:bg-gray-800' : ''}
-                onClick={() => setPeriod('weekly')}
-              >
-                Weekly
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className={period === 'monthly' ? 'bg-gray-100 dark:bg-gray-800' : ''}
-                onClick={() => setPeriod('monthly')}
-              >
-                Monthly
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className={period === 'yearly' ? 'bg-gray-100 dark:bg-gray-800' : ''}
-                onClick={() => setPeriod('yearly')}
-              >
-                Yearly
-              </Button>
-            </ButtonGroup>
+      {(title || description || icon) && (
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-center">
+            <div>
+              {(title || icon) && (
+                <CardTitle className="flex items-center gap-2">
+                  {icon}
+                  <span>{title}</span>
+                </CardTitle>
+              )}
+              {description && <CardDescription>{description}</CardDescription>}
+            </div>
             <Button 
               variant="outline" 
               size="sm"
@@ -90,14 +59,14 @@ const AnalyticsChartCard = ({
               <Eye className="h-4 w-4 mr-1" /> View Report
             </Button>
           </div>
-        </div>
-      </CardHeader>
+        </CardHeader>
+      )}
       <CardContent className="pt-4">
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             {chartType === 'line' ? (
               <LineChart
-                data={currentData}
+                data={data}
                 margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
@@ -126,7 +95,7 @@ const AnalyticsChartCard = ({
               </LineChart>
             ) : (
               <BarChart
-                data={currentData}
+                data={data}
                 margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />

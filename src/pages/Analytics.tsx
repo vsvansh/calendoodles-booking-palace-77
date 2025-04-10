@@ -1,6 +1,5 @@
-
-import { useState } from 'react';
-import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight, Calendar as CalendarIcon, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight, CalendarIcon, Users } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -107,6 +106,10 @@ const Analytics = () => {
   const [activityTabValue, setActivityTabValue] = useState('all');
   const [revenueTimeframe, setRevenueTimeframe] = useState('monthly');
   const [bookingsTimeframe, setBookingsTimeframe] = useState('monthly');
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const filteredActivity = activityTabValue === 'all' 
     ? activityData 
@@ -157,7 +160,7 @@ const Analytics = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fadeIn">
       <div>
         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Analytics</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
@@ -262,8 +265,6 @@ const Analytics = () => {
             </ButtonGroup>
           </div>
           <AnalyticsChartCard
-            title=""
-            description=""
             chartType="line"
             data={revenueData[revenueTimeframe as keyof typeof revenueData]}
             dataKeys={{
@@ -309,8 +310,6 @@ const Analytics = () => {
             </ButtonGroup>
           </div>
           <AnalyticsChartCard
-            title=""
-            description=""
             chartType="bar"
             data={bookingsData[bookingsTimeframe as keyof typeof bookingsData]}
             dataKeys={{
