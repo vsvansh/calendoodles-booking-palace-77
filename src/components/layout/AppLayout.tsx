@@ -5,7 +5,6 @@ import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import Footer from "./Footer";
 
 const AppLayout = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -48,18 +47,6 @@ const AppLayout = () => {
     });
   }, [location.pathname]);
 
-  // Apply dark mode by default
-  useEffect(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
-    
-    // Set dark mode by default (unless explicitly set to light)
-    if (!savedTheme || savedTheme === 'dark' || (savedTheme === 'system' && prefersDark)) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    }
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900/90 dark:to-gray-950 transition-colors duration-500">
       {/* Enhanced radial gradients for dark mode */}
@@ -69,7 +56,7 @@ const AppLayout = () => {
       {/* Fixed position navbar */}
       <Navbar onMenuClick={() => setShowSidebar(!showSidebar)} sidebarOpen={showSidebar} />
       
-      <div className="flex flex-grow pt-16 pb-20">
+      <div className="flex flex-grow pt-16">
         {/* Sidebar with fixed position */}
         <div ref={sidebarRef} className="z-40">
           <Sidebar isOpen={showSidebar} setIsOpen={setShowSidebar} />
@@ -85,13 +72,6 @@ const AppLayout = () => {
             <Outlet />
           </div>
         </main>
-      </div>
-      
-      {/* Fixed Footer */}
-      <div className={`fixed bottom-0 left-0 right-0 z-30 transition-all duration-500 ease-out ${
-        showSidebar ? 'ml-0 sm:ml-64' : 'ml-0 sm:ml-20'
-      }`}>
-        <Footer />
       </div>
     </div>
   );

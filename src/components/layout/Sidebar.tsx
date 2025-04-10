@@ -1,4 +1,3 @@
-
 import { forwardRef, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,8 @@ import {
   CreditCard,
   BarChart3,
   User,
-  ChevronRight
+  ChevronRight,
+  MessageSquareHeart
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -39,6 +39,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Profile', href: '/profile', icon: User },
     { name: 'Settings', href: '/settings', icon: Settings },
+    { name: 'Contact Us', href: '/contact-us', icon: MessageSquareHeart },
   ];
 
   const renderNavItems = () => (

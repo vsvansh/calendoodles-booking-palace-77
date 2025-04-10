@@ -19,7 +19,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:hover:shadow-[0_0_18px_rgba(155,89,182,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px]",
         ghost: "hover:bg-accent hover:text-accent-foreground transition-all duration-300 active:scale-95 dark:hover:bg-gray-800/70 transform-gpu hover:translate-y-[-1px]",
         link: "text-primary underline-offset-4 hover:underline transition-all duration-200 dark:text-calendoodle-blue dark:hover:text-calendoodle-blue/90 dark:hover:filter dark:hover:drop-shadow-[0_0_8px_rgba(52,152,219,0.8)]",
-        gradient: "bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground hover:from-primary hover:to-secondary dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.7)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px] dark:from-calendoodle-blue dark:to-calendoodle-purple dark:text-white",
+        gradient: "bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 dark:hover:shadow-[0_0_20px_rgba(52,152,219,0.7)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-1px] dark:from-calendoodle-blue dark:to-calendoodle-purple dark:text-white",
+        "gradient-apple": "bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 shadow-lg hover:shadow-xl dark:hover:shadow-[0_0_25px_rgba(66,153,225,0.6)] transition-all duration-300 active:scale-95 transform-gpu hover:translate-y-[-2px]",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Default to dark mode
+    // Default to light mode
     if (typeof window !== 'undefined') {
       // Check for stored preference
       const storedTheme = window.localStorage.getItem('theme');
       if (storedTheme) {
         return storedTheme === 'dark';
       }
-      // Default to dark mode
-      return true;
+      // Default to light mode
+      return false;
     }
-    return true;
+    return false;
   });
 
   useEffect(() => {
@@ -29,11 +29,11 @@ export function ThemeToggle() {
     }
   }, [isDarkMode]);
 
-  // Set dark mode on initial load
+  // Set light mode on initial load
   useEffect(() => {
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-    setIsDarkMode(true);
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+    setIsDarkMode(false);
   }, []);
 
   const toggleTheme = () => {
