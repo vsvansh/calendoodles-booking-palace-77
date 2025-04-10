@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -6,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Bell, Calendar, Menu, LogOut, User, Settings, Check, Info, AlertTriangle } from "lucide-react";
-import { ThemeToggle } from "../ThemeToggle";
+import { ThemeToggleButton } from "../ThemeToggleButton";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -116,7 +117,7 @@ const Navbar = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <ThemeToggle />
+          <ThemeToggleButton />
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { format, parse } from "date-fns";
+import { useState, useEffect } from "react";
+import { format, parseISO, isToday, isTomorrow } from "date-fns";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -17,6 +16,7 @@ import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CalendarEvent } from "@/types/calendar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatDateInput, parseFormattedDate } from "@/utils/DateFormatter";
 
 // Mock events data
 const mockEvents: CalendarEvent[] = [
@@ -177,25 +177,13 @@ const Calendar = () => {
     );
   };
 
-  const parseCustomDateFormat = (dateString: string): Date | null => {
-    try {
-      // Try to parse DD-MM-YYYY format
-      if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
-        return parse(dateString, 'dd-MM-yyyy', new Date());
-      }
-      // Try to parse DD/MM/YYYY format
-      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
-        return parse(dateString, 'dd/MM/yyyy', new Date());
-      }
-      // Try other formats if needed
-      return new Date(dateString);
-    } catch (error) {
-      return null;
-    }
+  const handleJumpToDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatDateInput(e.target.value);
+    setJumpToDateInput(formattedValue);
   };
 
   const handleJumpToDate = () => {
-    const parsedDate = parseCustomDateFormat(jumpToDateInput);
+    const parsedDate = parseFormattedDate(jumpToDateInput);
     
     if (parsedDate && !isNaN(parsedDate.getTime())) {
       setCurrentDate(parsedDate);
@@ -236,7 +224,7 @@ const Calendar = () => {
                     id="jump-date" 
                     placeholder="DD-MM-YYYY" 
                     value={jumpToDateInput}
-                    onChange={(e) => setJumpToDateInput(e.target.value)}
+                    onChange={handleJumpToDateInputChange}
                     className="w-full"
                   />
                 </div>

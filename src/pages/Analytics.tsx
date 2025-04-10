@@ -1,331 +1,331 @@
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUpRight, BarChart3, PieChart as PieChartIcon, LineChart as LineChartIcon, Download } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { Eye, ArrowUpRight, ChevronRight, BarChart3, LineChart as LineChartIcon, PieChart, Users, Calendar, Activity } from 'lucide-react';
 
-// Sample data for different time frames
-const weeklyRevenue = [
-  { name: 'Mon', value: 800 },
-  { name: 'Tue', value: 1200 },
-  { name: 'Wed', value: 900 },
-  { name: 'Thu', value: 1500 },
-  { name: 'Fri', value: 2000 },
-  { name: 'Sat', value: 1800 },
-  { name: 'Sun', value: 1000 },
+// Sample data for analytics
+const revenueData = [
+  { month: 'Jan', revenue: 4000 },
+  { month: 'Feb', revenue: 3000 },
+  { month: 'Mar', revenue: 5000 },
+  { month: 'Apr', revenue: 2780 },
+  { month: 'May', revenue: 1890 },
+  { month: 'Jun', revenue: 2390 },
+  { month: 'Jul', revenue: 3490 },
 ];
 
-const monthlyRevenue = [
-  { name: 'Jan', value: 4000 },
-  { name: 'Feb', value: 3000 },
-  { name: 'Mar', value: 5000 },
-  { name: 'Apr', value: 4500 },
-  { name: 'May', value: 6000 },
-  { name: 'Jun', value: 5500 },
-  { name: 'Jul', value: 7000 },
-  { name: 'Aug', value: 8000 },
-  { name: 'Sep', value: 7500 },
-  { name: 'Oct', value: 9000 },
-  { name: 'Nov', value: 8500 },
-  { name: 'Dec', value: 10000 },
+const bookingsData = [
+  { month: 'Jan', completed: 65, cancelled: 12 },
+  { month: 'Feb', completed: 59, cancelled: 15 },
+  { month: 'Mar', completed: 80, cancelled: 8 },
+  { month: 'Apr', completed: 81, cancelled: 10 },
+  { month: 'May', completed: 56, cancelled: 20 },
+  { month: 'Jun', completed: 55, cancelled: 18 },
+  { month: 'Jul', completed: 40, cancelled: 15 },
 ];
 
-const yearlyRevenue = [
-  { name: '2020', value: 35000 },
-  { name: '2021', value: 45000 },
-  { name: '2022', value: 58000 },
-  { name: '2023', value: 72000 },
-  { name: '2024', value: 88000 },
-  { name: '2025', value: 45000 },
-];
-
-const serviceData = [
-  { name: 'Haircut', value: 35 },
-  { name: 'Coloring', value: 25 },
-  { name: 'Styling', value: 15 },
-  { name: 'Treatment', value: 10 },
-  { name: 'Products', value: 15 },
-];
-
-const COLORS = ['#8B5CF6', '#D946EF', '#F97316', '#0EA5E9', '#10B981'];
-
-const weeklyClientData = [
-  { name: 'Mon', new: 2, returning: 5 },
-  { name: 'Tue', new: 3, returning: 7 },
-  { name: 'Wed', new: 1, returning: 4 },
-  { name: 'Thu', new: 4, returning: 6 },
-  { name: 'Fri', new: 5, returning: 8 },
-  { name: 'Sat', new: 7, returning: 12 },
-  { name: 'Sun', new: 2, returning: 5 },
-];
-
-const monthlyClientData = [
-  { name: 'Jan', new: 45, returning: 35 },
-  { name: 'Feb', new: 50, returning: 40 },
-  { name: 'Mar', new: 55, returning: 45 },
-  { name: 'Apr', new: 60, returning: 50 },
-  { name: 'May', new: 65, returning: 55 },
-  { name: 'Jun', new: 70, returning: 60 },
-  { name: 'Jul', new: 75, returning: 65 },
-  { name: 'Aug', new: 80, returning: 70 },
-  { name: 'Sep', new: 85, returning: 75 },
-  { name: 'Oct', new: 90, returning: 80 },
-  { name: 'Nov', new: 95, returning: 85 },
-  { name: 'Dec', new: 100, returning: 90 },
-];
-
-const yearlyClientData = [
-  { name: '2020', new: 250, returning: 320 },
-  { name: '2021', new: 300, returning: 450 },
-  { name: '2022', new: 350, returning: 520 },
-  { name: '2023', new: 420, returning: 620 },
-  { name: '2024', new: 480, returning: 720 },
-  { name: '2025', new: 200, returning: 350 },
+const activityData = [
+  { 
+    id: 1, 
+    type: 'appointment', 
+    title: 'New booking with Sarah Johnson', 
+    time: '10 minutes ago',
+    icon: Calendar
+  },
+  { 
+    id: 2, 
+    type: 'client', 
+    title: 'New client registration: John Doe', 
+    time: '2 hours ago',
+    icon: Users
+  },
+  { 
+    id: 3, 
+    type: 'payment', 
+    title: 'Payment received: $75.00 from Emily Clark', 
+    time: '3 hours ago',
+    icon: Activity
+  },
+  { 
+    id: 4, 
+    type: 'appointment', 
+    title: 'Appointment cancelled by Michael Brown', 
+    time: '5 hours ago',
+    icon: Calendar
+  },
+  { 
+    id: 5, 
+    type: 'client', 
+    title: 'Updated client profile: Alice Williams', 
+    time: 'Yesterday',
+    icon: Users
+  },
 ];
 
 const Analytics = () => {
   const { toast } = useToast();
-  const [timeFrame, setTimeFrame] = useState("year");
-  const [chartType, setChartType] = useState("revenue");
-  
-  // Get data based on selected time frame
-  const getRevenueData = () => {
-    switch(timeFrame) {
-      case 'week': return weeklyRevenue;
-      case 'month': return monthlyRevenue;
-      case 'year': 
-      default: return yearlyRevenue;
-    }
-  };
-  
-  const getClientData = () => {
-    switch(timeFrame) {
-      case 'week': return weeklyClientData;
-      case 'month': return monthlyClientData;
-      case 'year': 
-      default: return yearlyClientData;
-    }
-  };
-  
-  const formatCurrency = (value: number) => {
-    return `$${value.toFixed(2)}`;
-  };
-  
-  const handleExportData = () => {
+  const [chartTimePeriod, setChartTimePeriod] = useState('week');
+  const [activityTabValue, setActivityTabValue] = useState('all');
+
+  const filteredActivity = activityTabValue === 'all' 
+    ? activityData 
+    : activityData.filter(item => item.type === activityTabValue);
+
+  const handleViewReport = (reportType: string) => {
     toast({
-      title: "Export started",
-      description: "Your data export has been initiated.",
+      title: `Viewing ${reportType} Report`,
+      description: `The detailed ${reportType.toLowerCase()} report is being prepared.`,
     });
   };
-  
-  const handleViewDetails = () => {
-    toast({
-      title: "Loading details",
-      description: "Detailed analytics report is being prepared.",
-    });
+
+  const getActivityIcon = (activity: typeof activityData[0]) => {
+    const Icon = activity.icon;
+    switch (activity.type) {
+      case 'appointment':
+        return <Icon className="h-5 w-5 text-calendoodle-blue" />;
+      case 'client':
+        return <Icon className="h-5 w-5 text-calendoodle-purple" />;
+      case 'payment':
+        return <Icon className="h-5 w-5 text-calendoodle-green" />;
+      default:
+        return <Activity className="h-5 w-5 text-calendoodle-orange" />;
+    }
   };
-  
-  // Calculate totals based on current time frame
-  const revenueData = getRevenueData();
-  const totalRevenue = revenueData.reduce((sum, item) => sum + item.value, 0);
-  const averageRevenue = totalRevenue / revenueData.length;
-  const clientData = getClientData();
-  const totalClients = clientData.reduce((sum, item) => sum + item.new + item.returning, 0);
-  
+
   return (
-    <div className="flex flex-col gap-6 animate-fade-in">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
-        <p className="text-muted-foreground">
-          Track your business performance and client activity
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Analytics</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">
+          Track your business performance and insights
         </p>
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Total Revenue
-            </CardTitle>
-            <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last {timeFrame}
-            </p>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="border-2 border-calendoodle-blue/20 shadow-md hover:shadow-lg transition-all duration-300 dark:shadow-glow-blue bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:translate-y-[-4px]">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Revenue</p>
+                <p className="text-3xl font-bold mt-1 text-gray-800 dark:text-gray-100">$12,628</p>
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">+8.2% from last month</p>
+              </div>
+              <div className="p-3 rounded-full bg-calendoodle-blue/10 text-calendoodle-blue">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Average Revenue
-            </CardTitle>
-            <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(averageRevenue)}</div>
-            <p className="text-xs text-muted-foreground">
-              +10.5% from last {timeFrame}
-            </p>
+
+        <Card className="border-2 border-calendoodle-purple/20 shadow-md hover:shadow-lg transition-all duration-300 dark:shadow-glow-purple bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:translate-y-[-4px]">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Bookings</p>
+                <p className="text-3xl font-bold mt-1 text-gray-800 dark:text-gray-100">243</p>
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">+12.5% from last month</p>
+              </div>
+              <div className="p-3 rounded-full bg-calendoodle-purple/10 text-calendoodle-purple">
+                <Calendar className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Total Appointments
-            </CardTitle>
-            <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalClients}</div>
-            <p className="text-xs text-muted-foreground">
-              +12.2% from last {timeFrame}
-            </p>
+
+        <Card className="border-2 border-calendoodle-green/20 shadow-md hover:shadow-lg transition-all duration-300 dark:shadow-glow-green bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:translate-y-[-4px]">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">New Clients</p>
+                <p className="text-3xl font-bold mt-1 text-gray-800 dark:text-gray-100">48</p>
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">+3.8% from last month</p>
+              </div>
+              <div className="p-3 rounded-full bg-calendoodle-green/10 text-calendoodle-green">
+                <Users className="h-5 w-5" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-calendoodle-orange/20 shadow-md hover:shadow-lg transition-all duration-300 dark:shadow-glow-orange bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:translate-y-[-4px]">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Completion Rate</p>
+                <p className="text-3xl font-bold mt-1 text-gray-800 dark:text-gray-100">87%</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">-2.1% from last month</p>
+              </div>
+              <div className="p-3 rounded-full bg-calendoodle-orange/10 text-calendoodle-orange">
+                <Activity className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="md:col-span-2 lg:col-span-5">
-          <CardHeader className="flex flex-row items-center">
-            <div className="flex-1">
-              <CardTitle>Revenue Overview</CardTitle>
-              <CardDescription>
-                {timeFrame === 'week' ? 'Weekly' : timeFrame === 'month' ? 'Monthly' : 'Yearly'} revenue
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-3">
-              <Select 
-                defaultValue="year" 
-                value={timeFrame}
-                onValueChange={setTimeFrame}
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <LineChartIcon className="h-5 w-5 text-calendoodle-blue" />
+                  <span>Revenue</span>
+                </CardTitle>
+                <CardDescription>Monthly revenue breakdown</CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleViewReport('Revenue')}
+                className="text-calendoodle-blue hover:text-calendoodle-blue/90 hover:bg-calendoodle-blue/10 transition-colors"
               >
-                <SelectTrigger className="h-8 w-[120px]">
-                  <SelectValue placeholder="Select timeframe" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="week">This Week</SelectItem>
-                  <SelectItem value="month">This Month</SelectItem>
-                  <SelectItem value="year">This Year</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button size="sm" variant="outline" className="h-8 gap-1" onClick={handleExportData}>
-                <Download className="h-4 w-4" />
-                Export
+                <Eye className="h-4 w-4 mr-1" /> View Report
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <Tabs value={chartType} onValueChange={setChartType} className="w-full">
-              <TabsList className="mb-4">
-                <TabsTrigger value="revenue" className="gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  Revenue
-                </TabsTrigger>
-                <TabsTrigger value="clients" className="gap-2">
-                  <LineChartIcon className="h-4 w-4" />
-                  Clients
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="revenue" className="w-full">
-                <ResponsiveContainer width="100%" height={350}>
-                  <BarChart data={getRevenueData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis tickFormatter={(value) => `$${value}`} />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
-                    <Legend />
-                    <Bar dataKey="value" name="Revenue" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </TabsContent>
-              <TabsContent value="clients" className="w-full">
-                <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={getClientData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="new" name="New Clients" stroke="#8B5CF6" strokeWidth={2} activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="returning" name="Returning Clients" stroke="#F97316" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </TabsContent>
-            </Tabs>
+          <CardContent className="pt-4">
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={revenueData}
+                  margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+                  <XAxis dataKey="month" stroke="#6B7280" />
+                  <YAxis stroke="#6B7280" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(17, 24, 39, 0.8)', 
+                      border: 'none',
+                      borderRadius: '4px',
+                      color: '#F9FAFB' 
+                    }}
+                  />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    name="Revenue ($)"
+                    stroke="#3B82F6" 
+                    activeDot={{ r: 8 }} 
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Service Distribution</CardTitle>
-            <CardDescription>
-              Breakdown by service type
-            </CardDescription>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-calendoodle-purple" />
+                  <span>Bookings</span>
+                </CardTitle>
+                <CardDescription>Completed vs. cancelled appointments</CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleViewReport('Bookings')}
+                className="text-calendoodle-purple hover:text-calendoodle-purple/90 hover:bg-calendoodle-purple/10 transition-colors"
+              >
+                <Eye className="h-4 w-4 mr-1" /> View Report
+              </Button>
+            </div>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Tooltip formatter={(value) => [`${value}%`, 'Percentage']} />
-                <Pie
-                  data={serviceData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+          <CardContent className="pt-4">
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={bookingsData}
+                  margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
                 >
-                  {serviceData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+                  <XAxis dataKey="month" stroke="#6B7280" />
+                  <YAxis stroke="#6B7280" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(17, 24, 39, 0.8)', 
+                      border: 'none',
+                      borderRadius: '4px',
+                      color: '#F9FAFB' 
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="completed" name="Completed" fill="#10B981" />
+                  <Bar dataKey="cancelled" name="Cancelled" fill="#EF4444" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>
-      
+
+      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Your business activity for the past month</CardDescription>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center gap-2">
+              <Activity className="h-5 w-5 text-calendoodle-orange" />
+              <span>Recent Activity</span>
+            </CardTitle>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-calendoodle-blue hover:text-blue-700"
+              onClick={() => handleViewReport('Activity')}
+            >
+              View all <ArrowUpRight className="ml-1 h-3 w-3" />
+            </Button>
+          </div>
+          <Tabs value={activityTabValue} onValueChange={setActivityTabValue} className="w-full">
+            <TabsList className="grid grid-cols-3 max-w-[400px]">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="appointment">Appointments</TabsTrigger>
+              <TabsTrigger value="client">Clients</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="flex items-center gap-4 rounded-md border p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <PieChartIcon className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium">Revenue increased by 12%</p>
-              <p className="text-xs text-muted-foreground">Compared to last month</p>
-            </div>
-            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
-          </div>
-          <div className="flex items-center gap-4 rounded-md border p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <LineChartIcon className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium">15 new clients this month</p>
-              <p className="text-xs text-muted-foreground">5 more than last month</p>
-            </div>
-            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
-          </div>
-          <div className="flex items-center gap-4 rounded-md border p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <BarChart3 className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium">Appointment bookings up 8%</p>
-              <p className="text-xs text-muted-foreground">More clients scheduling online</p>
-            </div>
-            <Button variant="ghost" size="sm" onClick={handleViewDetails}>View</Button>
+        <CardContent>
+          <div className="space-y-4">
+            {filteredActivity.length === 0 ? (
+              <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+                No recent activity found
+              </div>
+            ) : (
+              filteredActivity.map((activity) => (
+                <div 
+                  key={activity.id}
+                  className="flex items-start p-3 rounded-lg border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 mr-3">
+                    {getActivityIcon(activity)}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{activity.title}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{activity.time}</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                    onClick={() => handleViewReport(`${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)} Details`)}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>

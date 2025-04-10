@@ -1,145 +1,223 @@
-import { forwardRef, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sheet, SheetClose, SheetContent } from '@/components/ui/sheet';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import {
-  Calendar,
-  Clock,
-  Home,
-  Settings,
+
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { 
+  BarChart3, 
+  Calendar, 
+  CreditCard, 
+  Layers, 
+  Settings, 
   Users,
-  CalendarClock,
-  CreditCard,
-  BarChart3,
-  User,
   ChevronRight,
-  MessageSquareHeart
-} from 'lucide-react';
+  ChevronLeft,
+  Home,
+  CalendarClock,
+  User,
+  MessageSquare
+} from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, setIsOpen }, ref) => {
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: <Home className="h-5 w-5" />,
+    route: "/",
+  },
+  {
+    title: "Calendar",
+    icon: <Calendar className="h-5 w-5" />,
+    route: "/calendar",
+  },
+  {
+    title: "Appointments",
+    icon: <CalendarClock className="h-5 w-5" />,
+    route: "/appointments",
+  },
+  {
+    title: "Services",
+    icon: <Layers className="h-5 w-5" />,
+    route: "/services",
+  },
+  {
+    title: "Clients",
+    icon: <Users className="h-5 w-5" />,
+    route: "/clients",
+  },
+  {
+    title: "Payments",
+    icon: <CreditCard className="h-5 w-5" />,
+    route: "/payments",
+  },
+  {
+    title: "Analytics",
+    icon: <BarChart3 className="h-5 w-5" />,
+    route: "/analytics",
+  },
+];
+
+const secondaryMenuItems = [
+  {
+    title: "Profile",
+    icon: <User className="h-5 w-5" />,
+    route: "/profile",
+  },
+  {
+    title: "Settings",
+    icon: <Settings className="h-5 w-5" />,
+    route: "/settings",
+  },
+  {
+    title: "Contact Us",
+    icon: <MessageSquare className="h-5 w-5" />,
+    route: "/contact-us",
+  }
+];
+
+const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const isMobile = useIsMobile();
-  const location = useLocation();
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  
-  const navigationItems = [
-    { name: 'Dashboard', href: '/', icon: Home },
-    { name: 'Calendar', href: '/calendar', icon: Calendar },
-    { name: 'Appointments', href: '/appointments', icon: CalendarClock },
-    { name: 'Services', href: '/services', icon: Clock },
-    { name: 'Clients', href: '/clients', icon: Users },
-    { name: 'Payments', href: '/payments', icon: CreditCard },
-    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Profile', href: '/profile', icon: User },
-    { name: 'Settings', href: '/settings', icon: Settings },
-    { name: 'Contact Us', href: '/contact-us', icon: MessageSquareHeart },
-  ];
 
-  const renderNavItems = () => (
-    <div className="space-y-2">
-      {navigationItems.map((item) => {
-        const IconComponent = item.icon;
-        const isActive = location.pathname === item.href;
-        
-        return (
-          <TooltipProvider key={item.name} delayDuration={300}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  to={item.href}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl group transition-all duration-300
-                  ${isActive 
-                    ? 'bg-calendoodle-purple/20 text-calendoodle-purple dark:bg-calendoodle-purple/30 dark:text-white' 
-                    : 'hover:bg-calendoodle-purple/10 hover:text-calendoodle-purple dark:hover:bg-calendoodle-purple/20 dark:text-gray-300 dark:hover:text-white'}`}
-                  onClick={() => {
-                    if (isMobile) setIsOpen(false);
-                    // Scroll to top when navigating
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth'
-                    });
-                  }}
-                >
-                  <IconComponent 
-                    className={`${!isOpen && !isMobile ? 'mx-auto' : 'mr-3'} h-5 w-5 flex-shrink-0 
-                    group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 
-                    ${isActive ? 'text-calendoodle-purple dark:text-calendoodle-blue dark:drop-shadow-[0_0_8px_rgba(52,152,219,0.8)]' : ''}`} 
-                    aria-hidden="true" 
-                  />
-                  {(isOpen || isMobile) && (
-                    <span className="truncate transition-all duration-300">
-                      {item.name}
-                    </span>
-                  )}
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right" className={isOpen ? "hidden" : ""}>
-                {item.name}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        );
-      })}
-    </div>
-  );
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
-  const mobileView = () => (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent side="left" className="w-64 p-0 border-r pt-16 dark:bg-gray-950 dark:border-gray-800 dark:shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-        <ScrollArea className="h-full py-4 scrollbar-thin">
-          <div className="px-3 pb-16 pt-2">
-            {renderNavItems()}
-          </div>
-        </ScrollArea>
-        <SheetClose ref={closeButtonRef} className="sr-only">Close</SheetClose>
-      </SheetContent>
-    </Sheet>
-  );
+  // For mobile, show sidebar as an overlay when open
+  if (isMobile) {
+    if (!isOpen) return null;
 
-  const desktopView = () => (
-    <div
-      ref={ref}
-      className={`fixed z-30 ${
-        isOpen ? 'w-64' : 'w-20'
-      } left-0 top-16 bottom-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-r dark:border-gray-800 h-[calc(100vh-4rem)] dark:shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-all duration-500 ease-in-out`}
-    >
-      <div className="flex items-center justify-end px-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsOpen(!isOpen)}
-          className="h-7 w-7 absolute -right-3.5 top-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm z-50 hover:shadow-md dark:hover:shadow-[0_0_8px_rgba(52,152,219,0.5)] transition-all duration-300"
-          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
-        >
-          {isOpen ? (
-            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-300 hover:scale-110" />
-          ) : (
-            <ChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400 rotate-180 transition-transform duration-300 hover:scale-110" />
-          )}
-        </Button>
+    return (
+      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity" onClick={toggleSidebar}>
+        <SidebarContent isOpen={true} setIsOpen={setIsOpen} toggleSidebar={toggleSidebar} />
       </div>
-      
-      <ScrollArea className="h-full py-4 scrollbar-thin">
-        <div className="px-3 pb-16 pt-6">{renderNavItems()}</div>
-      </ScrollArea>
-    </div>
-  );
+    );
+  }
+
+  // For desktop, show collapsible sidebar that shrinks instead of hiding
+  return <SidebarContent isOpen={isOpen} setIsOpen={setIsOpen} toggleSidebar={toggleSidebar} />;
+};
+
+// Separating the content to reuse between mobile and desktop views
+const SidebarContent = ({ 
+  isOpen, 
+  setIsOpen, 
+  toggleSidebar 
+}: {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  toggleSidebar: () => void;
+}) => {
+  const isMobile = useIsMobile();
 
   return (
-    <>
-      {isMobile ? mobileView() : desktopView()}
-      {!isMobile && <div className={`${isOpen ? 'w-64' : 'w-20'} flex-shrink-0 transition-all duration-500`} />}
-    </>
+    <aside 
+      className={cn(
+        "fixed left-0 top-16 bottom-0 z-40 h-[calc(100vh-4rem)] bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out",
+        isOpen ? "w-64" : "w-20"
+      )}
+      // Stop propagation to prevent the sidebar from closing when clicking inside it (for mobile)
+      onClick={e => isMobile && e.stopPropagation()}
+    > 
+      <div 
+        className={cn(
+          "h-full flex flex-col py-5 px-4 scrollbar-none transition-all duration-300 ease-in-out",
+          isOpen ? "overflow-y-auto" : "overflow-visible"
+        )}
+      >
+        <div className="flex-1 space-y-2">
+          <NavItems items={menuItems} isOpen={isOpen} />
+        </div>
+        
+        <div className="mt-6 space-y-2 border-t border-gray-200 dark:border-gray-800 pt-6">
+          <NavItems items={secondaryMenuItems} isOpen={isOpen} />
+        </div>
+        
+        <div className="mt-6 border-t border-gray-200 dark:border-gray-800 pt-6 text-xs text-muted-foreground">
+          {isOpen && (
+            <div className="text-center text-gray-500 dark:text-gray-400 text-xs pt-2">
+              <div className="mb-1">Calendoodles v1.0.0</div>
+              <div>&copy; {new Date().getFullYear()} | All rights reserved</div>
+            </div>
+          )}
+          
+          <div className="mt-4 text-center">
+            {!isMobile && (
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={toggleSidebar}
+                className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                {isOpen ? (
+                  <ChevronLeft className="h-4 w-4" />
+                ) : (
+                  <ChevronRight className="h-4 w-4" />
+                )}
+                <span className="sr-only">Toggle sidebar</span>
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </aside>
   );
-});
+};
 
-Sidebar.displayName = "Sidebar";
+// Menu item render logic with optional tooltips for collapsed state
+const NavItems = ({ items, isOpen }: { items: any[]; isOpen: boolean }) => {
+  return items.map((item) => (
+    <NavItem key={item.route} item={item} isOpen={isOpen} />
+  ));
+};
+
+const NavItem = ({ item, isOpen }: { item: any; isOpen: boolean }) => {
+  const navLink = (
+    <NavLink
+      to={item.route}
+      className={({ isActive }) => 
+        cn(
+          "flex items-center group px-3 py-2 rounded-lg transition-colors",
+          "hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:transition-all hover:duration-300",
+          isActive 
+            ? "bg-gray-100 dark:bg-gray-800/60 text-calendoodle-blue dark:text-calendoodle-blue/90" 
+            : "text-gray-600 dark:text-gray-400",
+          isOpen ? "justify-start" : "justify-center"
+        )
+      }
+      onClick={() => window.scrollTo(0, 0)}
+    >
+      <span className={cn(
+        "transition duration-300",
+        isActive => isActive 
+          ? "text-calendoodle-blue dark:blue-glow" 
+          : "text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200"
+      )}>
+        {item.icon}
+      </span>
+      {isOpen && <span className="ml-3 text-sm">{item.title}</span>}
+    </NavLink>
+  );
+
+  if (!isOpen) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{navLink}</TooltipTrigger>
+          <TooltipContent side="right" className="bg-white dark:bg-gray-800 dark:border-gray-700 font-normal">
+            {item.title}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  return navLink;
+};
 
 export default Sidebar;

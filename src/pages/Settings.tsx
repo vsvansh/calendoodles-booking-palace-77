@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
@@ -8,18 +8,30 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+
+// Define accent color type and options
+type AccentColor = 'purple' | 'blue' | 'green' | 'red' | 'orange' | 'pink';
+
+const accentColors: Record<AccentColor, { bg: string, ring: string }> = {
+  'purple': { bg: 'bg-purple-500', ring: 'ring-purple-300' },
+  'blue': { bg: 'bg-blue-500', ring: 'ring-blue-300' },
+  'green': { bg: 'bg-green-500', ring: 'ring-green-300' },
+  'red': { bg: 'bg-red-500', ring: 'ring-red-300' },
+  'orange': { bg: 'bg-orange-500', ring: 'ring-orange-300' },
+  'pink': { bg: 'bg-pink-500', ring: 'ring-pink-300' }
+};
 
 const Settings = () => {
   const { toast } = useToast();
   const [theme, setTheme] = useState(() => {
-    // Get theme from localStorage or default to 'dark'
-    return localStorage.getItem('theme') || 'dark';
+    // Get theme from localStorage or default to 'light'
+    return localStorage.getItem('theme') || 'light';
   });
   const [language, setLanguage] = useState('english');
   const [reducedMotion, setReducedMotion] = useState(false);
   const [compactView, setCompactView] = useState(false);
-  const [accentColor, setAccentColor] = useState('purple');
+  const [accentColor, setAccentColor] = useState<AccentColor>('purple');
+  const [activeTab, setActiveTab] = useState('general');
   
   // Apply theme when component mounts or theme changes
   useEffect(() => {
@@ -64,6 +76,50 @@ const Settings = () => {
   useEffect(() => {
     // Apply accent color
     document.body.setAttribute('data-accent', accentColor);
+
+    // Update CSS variables based on accent color
+    const root = document.documentElement;
+    
+    // Define color values for each accent
+    const colorValues = {
+      'purple': {
+        main: '#9b59b6',
+        light: '#d6bcfa',
+        dark: '#7e3996',
+      },
+      'blue': {
+        main: '#3498db',
+        light: '#bee3f8',
+        dark: '#2c78b4',
+      },
+      'green': {
+        main: '#2ecc71',
+        light: '#c6f6d5',
+        dark: '#25a25a',
+      },
+      'red': {
+        main: '#e74c3c',
+        light: '#fed7d7',
+        dark: '#c53030',
+      },
+      'orange': {
+        main: '#f39c12',
+        light: '#feebc8',
+        dark: '#c27d0e',
+      },
+      'pink': {
+        main: '#e84393',
+        light: '#fed7e2',
+        dark: '#b83280',
+      },
+    };
+
+    const selected = colorValues[accentColor];
+    
+    root.style.setProperty('--calendoodle-accent', selected.main);
+    root.style.setProperty('--calendoodle-accent-light', selected.light);
+    root.style.setProperty('--calendoodle-accent-dark', selected.dark);
+
   }, [accentColor]);
   
   const handleGeneralSave = () => {
@@ -76,7 +132,7 @@ const Settings = () => {
   const handleAppearanceSave = () => {
     toast({
       title: 'Appearance updated',
-      description: `Theme set to ${theme}.`,
+      description: `Theme set to ${theme}, accent color set to ${accentColor}.`,
     });
   };
   
@@ -111,6 +167,20 @@ const Settings = () => {
     });
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    // Scroll to top when changing tabs
+    window.scrollTo(0, 0);
+  };
+
+  const handleAccentColorChange = (color: AccentColor) => {
+    setAccentColor(color);
+    toast({
+      title: 'Accent color updated',
+      description: `Accent color changed to ${color}.`,
+    });
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -120,7 +190,7 @@ const Settings = () => {
         </p>
       </div>
       
-      <Tabs defaultValue="general" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
         <TabsList className="glass-effect dark:neo-blur">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
@@ -277,38 +347,21 @@ const Settings = () => {
               
               <div className="space-y-2">
                 <Label>Accent Color</Label>
-                <div className="flex gap-2">
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-purple-500 transition-all duration-300 ${accentColor === 'purple' ? 'ring-2 ring-white dark:ring-purple-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('purple')}
-                  />
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-blue-500 transition-all duration-300 ${accentColor === 'blue' ? 'ring-2 ring-white dark:ring-blue-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('blue')}
-                  />
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-green-500 transition-all duration-300 ${accentColor === 'green' ? 'ring-2 ring-white dark:ring-green-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('green')}
-                  />
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-red-500 transition-all duration-300 ${accentColor === 'red' ? 'ring-2 ring-white dark:ring-red-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('red')}
-                  />
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-orange-500 transition-all duration-300 ${accentColor === 'orange' ? 'ring-2 ring-white dark:ring-orange-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('orange')}
-                  />
-                  <Button 
-                    className={`h-8 w-8 rounded-full bg-pink-500 transition-all duration-300 ${accentColor === 'pink' ? 'ring-2 ring-white dark:ring-pink-300 scale-125' : ''}`} 
-                    variant="outline" 
-                    onClick={() => setAccentColor('pink')}
-                  />
+                <div className="flex gap-3 flex-wrap">
+                  {(Object.keys(accentColors) as AccentColor[]).map(color => (
+                    <Button 
+                      key={color}
+                      className={`h-9 w-9 rounded-full ${accentColors[color].bg} transition-all duration-300 
+                        ${accentColor === color ? `ring-4 ${accentColors[color].ring} scale-125 shadow-lg` : 'opacity-70 hover:opacity-100'}`} 
+                      variant="outline" 
+                      aria-label={`Set accent color to ${color}`}
+                      onClick={() => handleAccentColorChange(color)}
+                    />
+                  ))}
                 </div>
+                <p className="text-[0.8rem] text-muted-foreground pt-2">
+                  Accent colors affect buttons, links, and highlights throughout the app.
+                </p>
               </div>
               
               <Button onClick={handleAppearanceSave} className="transition-all duration-300 hover:scale-105 dark:hover:shadow-[0_0_15px_rgba(52,152,219,0.5)]">Save Preferences</Button>

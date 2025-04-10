@@ -1,14 +1,14 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Calendar, CheckCircle, Clock, Layers, User, Users, X, 
   ArrowRight, CalendarClock, ArrowUpRight, Star, Bell,
-  BarChart3, Settings
+  BarChart3, Settings, Video
 } from "lucide-react";
-import { format, parseISO, isToday, isTomorrow } from "date-fns";
+import { format, parseISO, isToday, isTomorrow, addDays } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
@@ -17,7 +17,7 @@ const upcomingAppointments = [
   {
     id: "1",
     title: "Strategy Meeting",
-    date: "2025-04-08",  // Today
+    date: "2025-04-08",
     time: "10:00",
     duration: 60,
     status: "confirmed",
@@ -28,7 +28,7 @@ const upcomingAppointments = [
   {
     id: "2",
     title: "Doctor Appointment",
-    date: "2025-04-08", // Today
+    date: "2025-04-08",
     time: "14:00",
     duration: 30,
     status: "confirmed",
@@ -39,12 +39,34 @@ const upcomingAppointments = [
   {
     id: "3",
     title: "Team Lunch",
-    date: "2025-04-09", // Tomorrow
+    date: "2025-04-09",
     time: "12:00",
     duration: 90,
     status: "pending",
     color: "#2ecc71",
     attendeeName: "Team Alpha",
+    attendeeAvatar: "/placeholder.svg",
+  },
+  {
+    id: "4",
+    title: "Client Consultation",
+    date: format(addDays(new Date(), 2), "yyyy-MM-dd"),
+    time: "16:00",
+    duration: 45,
+    status: "pending",
+    color: "#9b59b6",
+    attendeeName: "John Williams",
+    attendeeAvatar: "/placeholder.svg",
+  },
+  {
+    id: "5",
+    title: "Project Review",
+    date: format(addDays(new Date(), 3), "yyyy-MM-dd"),
+    time: "09:30",
+    duration: 60,
+    status: "confirmed",
+    color: "#f39c12",
+    attendeeName: "Product Team",
     attendeeAvatar: "/placeholder.svg",
   },
 ];
@@ -134,6 +156,7 @@ const quickActions = [
 
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleActionClick = (action: string, appointmentId: string) => {
     toast({
@@ -142,11 +165,24 @@ const Index = () => {
     });
   };
 
+  const handleJoinMeeting = (appointmentId: string) => {
+    // In real app, this would initiate a video call
+    toast({
+      title: "Joining meeting",
+      description: `Connecting to meeting #${appointmentId}...`,
+    });
+  };
+
   const getDateLabel = (dateString: string) => {
     const date = parseISO(dateString);
     if (isToday(date)) return "Today";
     if (isTomorrow(date)) return "Tomorrow";
     return format(date, "EEE, MMM d");
+  };
+
+  const handleSettingsClick = () => {
+    navigate('/settings');
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -160,12 +196,16 @@ const Index = () => {
           </p>
           <div className="flex flex-wrap gap-4">
             <Link to="/calendar">
-              <Button className="calendoodle-btn calendoodle-btn-primary group">
+              <Button className="calendoodle-btn calendoodle-btn-primary group transform hover:scale-105 transition-transform duration-300">
                 <Calendar className="h-4 w-4 mr-2 group-hover:animate-spin-slow" />
                 Open Calendar
               </Button>
             </Link>
-            <Button variant="outline" className="border-2 rounded-full px-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+            <Button 
+              variant="outline" 
+              className="border-2 rounded-full px-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105"
+              onClick={handleSettingsClick}
+            >
               <Settings className="h-4 w-4 mr-2" /> Settings
             </Button>
           </div>
@@ -178,7 +218,10 @@ const Index = () => {
         {quickStats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className={`overflow-hidden border-2 ${stat.borderColor} shadow-md hover:shadow-lg transition-all duration-300 ${stat.glowClass} bg-white/80 backdrop-blur-sm dark:bg-gray-800/60`}>
+            <Card 
+              key={index} 
+              className={`overflow-hidden border-2 ${stat.borderColor} shadow-md hover:shadow-xl transition-all duration-300 ${stat.glowClass} bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:scale-105 hover:-translate-y-1`}
+            >
               <div className="h-1 w-full" style={{ backgroundColor: stat.color.replace("text-", "") }}></div>
               <CardContent className="pt-6 pb-4">
                 <div className="flex justify-between items-start">
@@ -221,7 +264,7 @@ const Index = () => {
                 return (
                   <div 
                     key={appointment.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border-2 border-gray-100 dark:border-gray-700 hover:border-calendoodle-blue/30 dark:hover:border-calendoodle-blue/30 hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(52,152,219,0.15)] transition-all group"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border-2 border-gray-100 dark:border-gray-700 hover:border-calendoodle-blue/30 dark:hover:border-calendoodle-blue/30 hover:shadow-md dark:hover:shadow-[0_0_10px_rgba(52,152,219,0.15)] transition-all group transform hover:-translate-y-1"
                   >
                     <div className="flex gap-3 mb-3 sm:mb-0">
                       <div className="relative">
@@ -275,7 +318,7 @@ const Index = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-800 dark:hover:bg-red-900/20 transition-all"
+                            className="text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-800 dark:hover:bg-red-900/20 transition-all transform hover:scale-105"
                             onClick={() => handleActionClick("Declined", appointment.id)}
                           >
                             <X className="h-3.5 w-3.5 mr-1" />
@@ -283,7 +326,7 @@ const Index = () => {
                           </Button>
                           <Button
                             size="sm"
-                            className="bg-calendoodle-green text-white hover:bg-calendoodle-green/90 transition-all"
+                            className="bg-calendoodle-green text-white hover:bg-calendoodle-green/90 transition-all transform hover:scale-105"
                             onClick={() => handleActionClick("Confirmed", appointment.id)}
                           >
                             <CheckCircle className="h-3.5 w-3.5 mr-1" />
@@ -292,8 +335,12 @@ const Index = () => {
                         </>
                       )}
                       {appointment.status === "confirmed" && (
-                        <Button size="sm" className="calendoodle-btn-primary py-1 px-4">
-                          Join Meeting
+                        <Button 
+                          size="sm" 
+                          className="calendoodle-btn-primary py-1 px-4 transition-transform hover:scale-105"
+                          onClick={() => handleJoinMeeting(appointment.id)}
+                        >
+                          <Video className="h-3.5 w-3.5 mr-1" /> Join Meeting
                         </Button>
                       )}
                     </div>
@@ -318,7 +365,7 @@ const Index = () => {
               const Icon = action.icon;
               return (
                 <Link to={action.href} key={index} className="block">
-                  <div className={`group flex items-center justify-between p-4 rounded-lg border-2 border-gray-100 dark:border-gray-700 hover:border-${action.hoverColor}/30 hover:shadow-sm transition-all duration-300`}>
+                  <div className={`group flex items-center justify-between p-4 rounded-lg border-2 border-gray-100 dark:border-gray-700 hover:border-${action.hoverColor}/30 hover:shadow-sm transition-all duration-300 transform hover:-translate-y-1`}>
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-md ${action.bgColor} group-hover:scale-110 transition-transform duration-300`}>
                         <Icon className={`h-5 w-5 ${action.color}`} />

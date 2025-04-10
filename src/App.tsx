@@ -19,6 +19,10 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import ChatbotDrawer from "./components/chat/ChatbotDrawer";
 import ContactUs from "./pages/ContactUs";
+import PrivacyPolicy from "./pages/policies/PrivacyPolicy";
+import TermsOfService from "./pages/policies/TermsOfService";
+import CookiePolicy from "./pages/policies/CookiePolicy";
+import Compliance from "./pages/policies/Compliance";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +49,12 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/contact-us" element={<ContactUs />} />
+            
+            {/* Policy Pages */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route path="/compliance" element={<Compliance />} />
           </Route>
           
           {/* Catch-all Route */}
