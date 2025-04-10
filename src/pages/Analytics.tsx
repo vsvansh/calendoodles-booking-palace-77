@@ -1,32 +1,67 @@
-
 import { useState } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, ArrowUpRight, ChevronRight, BarChart3, LineChart as LineChartIcon, PieChart, Users, Calendar, Activity } from 'lucide-react';
+import AnalyticsChartCard from '@/components/analytics/AnalyticsChartCard';
 
 // Sample data for analytics
-const revenueData = [
-  { month: 'Jan', revenue: 4000 },
-  { month: 'Feb', revenue: 3000 },
-  { month: 'Mar', revenue: 5000 },
-  { month: 'Apr', revenue: 2780 },
-  { month: 'May', revenue: 1890 },
-  { month: 'Jun', revenue: 2390 },
-  { month: 'Jul', revenue: 3490 },
-];
+const revenueData = {
+  weekly: [
+    { day: 'Mon', revenue: 400 },
+    { day: 'Tue', revenue: 300 },
+    { day: 'Wed', revenue: 500 },
+    { day: 'Thu', revenue: 278 },
+    { day: 'Fri', revenue: 189 },
+    { day: 'Sat', revenue: 239 },
+    { day: 'Sun', revenue: 349 },
+  ],
+  monthly: [
+    { month: 'Jan', revenue: 4000 },
+    { month: 'Feb', revenue: 3000 },
+    { month: 'Mar', revenue: 5000 },
+    { month: 'Apr', revenue: 2780 },
+    { month: 'May', revenue: 1890 },
+    { month: 'Jun', revenue: 2390 },
+    { month: 'Jul', revenue: 3490 },
+  ],
+  yearly: [
+    { year: '2020', revenue: 24000 },
+    { year: '2021', revenue: 32000 },
+    { year: '2022', revenue: 45000 },
+    { year: '2023', revenue: 52780 },
+    { year: '2024', revenue: 61890 },
+  ],
+};
 
-const bookingsData = [
-  { month: 'Jan', completed: 65, cancelled: 12 },
-  { month: 'Feb', completed: 59, cancelled: 15 },
-  { month: 'Mar', completed: 80, cancelled: 8 },
-  { month: 'Apr', completed: 81, cancelled: 10 },
-  { month: 'May', completed: 56, cancelled: 20 },
-  { month: 'Jun', completed: 55, cancelled: 18 },
-  { month: 'Jul', completed: 40, cancelled: 15 },
-];
+const bookingsData = {
+  weekly: [
+    { day: 'Mon', completed: 15, cancelled: 3 },
+    { day: 'Tue', completed: 12, cancelled: 2 },
+    { day: 'Wed', completed: 18, cancelled: 1 },
+    { day: 'Thu', completed: 14, cancelled: 4 },
+    { day: 'Fri', completed: 10, cancelled: 3 },
+    { day: 'Sat', completed: 8, cancelled: 2 },
+    { day: 'Sun', completed: 5, cancelled: 1 },
+  ],
+  monthly: [
+    { month: 'Jan', completed: 65, cancelled: 12 },
+    { month: 'Feb', completed: 59, cancelled: 15 },
+    { month: 'Mar', completed: 80, cancelled: 8 },
+    { month: 'Apr', completed: 81, cancelled: 10 },
+    { month: 'May', completed: 56, cancelled: 20 },
+    { month: 'Jun', completed: 55, cancelled: 18 },
+    { month: 'Jul', completed: 40, cancelled: 15 },
+  ],
+  yearly: [
+    { year: '2020', completed: 450, cancelled: 87 },
+    { year: '2021', completed: 520, cancelled: 92 },
+    { year: '2022', completed: 580, cancelled: 104 },
+    { year: '2023', completed: 640, cancelled: 120 },
+    { year: '2024', completed: 430, cancelled: 86 },
+  ],
+};
 
 const activityData = [
   { 
@@ -34,14 +69,14 @@ const activityData = [
     type: 'appointment', 
     title: 'New booking with Sarah Johnson', 
     time: '10 minutes ago',
-    icon: Calendar
+    icon: Activity
   },
   { 
     id: 2, 
     type: 'client', 
     title: 'New client registration: John Doe', 
     time: '2 hours ago',
-    icon: Users
+    icon: Activity
   },
   { 
     id: 3, 
@@ -55,20 +90,19 @@ const activityData = [
     type: 'appointment', 
     title: 'Appointment cancelled by Michael Brown', 
     time: '5 hours ago',
-    icon: Calendar
+    icon: Activity
   },
   { 
     id: 5, 
     type: 'client', 
     title: 'Updated client profile: Alice Williams', 
     time: 'Yesterday',
-    icon: Users
+    icon: Activity
   },
 ];
 
 const Analytics = () => {
   const { toast } = useToast();
-  const [chartTimePeriod, setChartTimePeriod] = useState('week');
   const [activityTabValue, setActivityTabValue] = useState('all');
 
   const filteredActivity = activityTabValue === 'all' 
@@ -80,6 +114,16 @@ const Analytics = () => {
       title: `Viewing ${reportType} Report`,
       description: `The detailed ${reportType.toLowerCase()} report is being prepared.`,
     });
+  };
+
+  const handleViewActivityDetails = (activityId: number) => {
+    const activity = activityData.find(a => a.id === activityId);
+    if (activity) {
+      toast({
+        title: `${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)} Details`,
+        description: `Viewing details for: ${activity.title}`,
+      });
+    }
   };
 
   const getActivityIcon = (activity: typeof activityData[0]) => {
@@ -170,105 +214,34 @@ const Analytics = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <LineChartIcon className="h-5 w-5 text-calendoodle-blue" />
-                  <span>Revenue</span>
-                </CardTitle>
-                <CardDescription>Monthly revenue breakdown</CardDescription>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => handleViewReport('Revenue')}
-                className="text-calendoodle-blue hover:text-calendoodle-blue/90 hover:bg-calendoodle-blue/10 transition-colors"
-              >
-                <Eye className="h-4 w-4 mr-1" /> View Report
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={revenueData}
-                  margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
-                  <XAxis dataKey="month" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(17, 24, 39, 0.8)', 
-                      border: 'none',
-                      borderRadius: '4px',
-                      color: '#F9FAFB' 
-                    }}
-                  />
-                  <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="revenue" 
-                    name="Revenue ($)"
-                    stroke="#3B82F6" 
-                    activeDot={{ r: 8 }} 
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        <AnalyticsChartCard
+          title="Revenue"
+          description="Monthly revenue breakdown"
+          icon={<LineChartIcon className="h-5 w-5 text-calendoodle-blue" />}
+          chartType="line"
+          data={revenueData}
+          dataKeys={{
+            name: 'month',
+            keys: [
+              { key: 'revenue', name: 'Revenue ($)', color: '#3B82F6' }
+            ]
+          }}
+        />
 
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-calendoodle-purple" />
-                  <span>Bookings</span>
-                </CardTitle>
-                <CardDescription>Completed vs. cancelled appointments</CardDescription>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => handleViewReport('Bookings')}
-                className="text-calendoodle-purple hover:text-calendoodle-purple/90 hover:bg-calendoodle-purple/10 transition-colors"
-              >
-                <Eye className="h-4 w-4 mr-1" /> View Report
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={bookingsData}
-                  margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
-                  <XAxis dataKey="month" stroke="#6B7280" />
-                  <YAxis stroke="#6B7280" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(17, 24, 39, 0.8)', 
-                      border: 'none',
-                      borderRadius: '4px',
-                      color: '#F9FAFB' 
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="completed" name="Completed" fill="#10B981" />
-                  <Bar dataKey="cancelled" name="Cancelled" fill="#EF4444" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        <AnalyticsChartCard
+          title="Bookings"
+          description="Completed vs. cancelled appointments"
+          icon={<BarChart3 className="h-5 w-5 text-calendoodle-purple" />}
+          chartType="bar"
+          data={bookingsData}
+          dataKeys={{
+            name: 'month',
+            keys: [
+              { key: 'completed', name: 'Completed', color: '#10B981' },
+              { key: 'cancelled', name: 'Cancelled', color: '#EF4444' }
+            ]
+          }}
+        />
       </div>
 
       {/* Recent Activity */}
@@ -285,7 +258,7 @@ const Analytics = () => {
               className="text-calendoodle-blue hover:text-blue-700"
               onClick={() => handleViewReport('Activity')}
             >
-              View all <ArrowUpRight className="ml-1 h-3 w-3" />
+              View all
             </Button>
           </div>
           <Tabs value={activityTabValue} onValueChange={setActivityTabValue} className="w-full">
@@ -319,7 +292,7 @@ const Analytics = () => {
                     variant="ghost" 
                     size="sm" 
                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                    onClick={() => handleViewReport(`${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)} Details`)}
+                    onClick={() => handleViewActivityDetails(activity.id)}
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>

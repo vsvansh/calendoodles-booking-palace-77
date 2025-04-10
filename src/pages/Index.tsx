@@ -11,6 +11,7 @@ import {
 import { format, parseISO, isToday, isTomorrow, addDays } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import confetti from "canvas-confetti";
 
 // Mock data
 const upcomingAppointments = [
@@ -67,6 +68,39 @@ const upcomingAppointments = [
     status: "confirmed",
     color: "#f39c12",
     attendeeName: "Product Team",
+    attendeeAvatar: "/placeholder.svg",
+  },
+  {
+    id: "6",
+    title: "Marketing Strategy Session",
+    date: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+    time: "13:00",
+    duration: 90,
+    status: "pending",
+    color: "#3498db",
+    attendeeName: "Marketing Team",
+    attendeeAvatar: "/placeholder.svg",
+  },
+  {
+    id: "7",
+    title: "Product Demo",
+    date: format(addDays(new Date(), 2), "yyyy-MM-dd"),
+    time: "11:00",
+    duration: 60,
+    status: "confirmed",
+    color: "#e74c3c",
+    attendeeName: "Client X",
+    attendeeAvatar: "/placeholder.svg",
+  },
+  {
+    id: "8",
+    title: "Design Review",
+    date: format(addDays(new Date(), 3), "yyyy-MM-dd"),
+    time: "15:30",
+    duration: 45,
+    status: "pending",
+    color: "#2ecc71",
+    attendeeName: "Design Team",
     attendeeAvatar: "/placeholder.svg",
   },
 ];
@@ -157,8 +191,23 @@ const quickActions = [
 const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [confirmedAppointments, setConfirmedAppointments] = useState<Record<string, boolean>>({});
+  const [joinedMeetings, setJoinedMeetings] = useState<Record<string, boolean>>({});
+  
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
   
   const handleActionClick = (action: string, appointmentId: string) => {
+    if (action === "Confirmed") {
+      setConfirmedAppointments(prev => ({ ...prev, [appointmentId]: true }));
+      triggerConfetti();
+    }
+    
     toast({
       title: `Appointment ${action}`,
       description: `Appointment #${appointmentId} has been ${action.toLowerCase()}.`,
@@ -166,10 +215,12 @@ const Index = () => {
   };
 
   const handleJoinMeeting = (appointmentId: string) => {
+    setJoinedMeetings(prev => ({ ...prev, [appointmentId]: true }));
+    triggerConfetti();
     // In real app, this would initiate a video call
     toast({
       title: "Joining meeting",
-      description: `Connecting to meeting #${appointmentId}...`,
+      description: `Connected to meeting #${appointmentId}! Meeting in progress...`,
     });
   };
 
@@ -203,7 +254,7 @@ const Index = () => {
             </Link>
             <Button 
               variant="outline" 
-              className="border-2 rounded-full px-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105"
+              className="border-2 rounded-full px-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
               onClick={handleSettingsClick}
             >
               <Settings className="h-4 w-4 mr-2" /> Settings
@@ -220,7 +271,7 @@ const Index = () => {
           return (
             <Card 
               key={index} 
-              className={`overflow-hidden border-2 ${stat.borderColor} shadow-md hover:shadow-xl transition-all duration-300 ${stat.glowClass} bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:scale-105 hover:-translate-y-1`}
+              className={`overflow-hidden border-2 ${stat.borderColor} shadow-md hover:shadow-xl transition-all duration-300 ${stat.glowClass} bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:scale-110 hover:-translate-y-2 hover:rotate-1 cursor-pointer`}
             >
               <div className="h-1 w-full" style={{ backgroundColor: stat.color.replace("text-", "") }}></div>
               <CardContent className="pt-6 pb-4">
@@ -257,7 +308,7 @@ const Index = () => {
             <CardDescription>Your schedule for the upcoming days</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
               {upcomingAppointments.map((appointment) => {
                 const dateLabel = getDateLabel(appointment.date);
                 
@@ -313,7 +364,7 @@ const Index = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 self-end sm:self-auto">
-                      {appointment.status === "pending" && (
+                      {appointment.status === "pending" && !confirmedAppointments[appointment.id] ? (
                         <>
                           <Button
                             size="sm"
@@ -333,8 +384,17 @@ const Index = () => {
                             Confirm
                           </Button>
                         </>
-                      )}
-                      {appointment.status === "confirmed" && (
+                      ) : appointment.status === "pending" && confirmedAppointments[appointment.id] ? (
+                        <Button
+                          size="sm"
+                          className="bg-green-500 text-white hover:bg-green-600 transition-all transform hover:scale-105"
+                          disabled
+                        >
+                          <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                          Confirmed
+                        </Button>
+                      ) : null}
+                      {(appointment.status === "confirmed" || confirmedAppointments[appointment.id]) && !joinedMeetings[appointment.id] ? (
                         <Button 
                           size="sm" 
                           className="calendoodle-btn-primary py-1 px-4 transition-transform hover:scale-105"
@@ -342,7 +402,14 @@ const Index = () => {
                         >
                           <Video className="h-3.5 w-3.5 mr-1" /> Join Meeting
                         </Button>
-                      )}
+                      ) : (appointment.status === "confirmed" || confirmedAppointments[appointment.id]) && joinedMeetings[appointment.id] ? (
+                        <Button 
+                          size="sm" 
+                          className="bg-purple-600 text-white py-1 px-4 transition-transform hover:scale-105 animate-pulse"
+                        >
+                          <Video className="h-3.5 w-3.5 mr-1" /> Meeting Joined
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
                 );

@@ -126,10 +126,28 @@ const SidebarContent = ({
     > 
       <div 
         className={cn(
-          "h-full flex flex-col py-5 px-4 scrollbar-none transition-all duration-300 ease-in-out",
-          isOpen ? "overflow-y-auto" : "overflow-visible"
+          "h-full flex flex-col py-5 px-4 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 transition-all duration-300 ease-in-out",
         )}
       >
+        {/* Toggle button at the top */}
+        <div className="mb-5 text-center">
+          {!isMobile && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleSidebar}
+              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {isOpen ? (
+                <ChevronLeft className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+              <span className="sr-only">Toggle sidebar</span>
+            </Button>
+          )}
+        </div>
+        
         <div className="flex-1 space-y-2">
           <NavItems items={menuItems} isOpen={isOpen} />
         </div>
@@ -145,24 +163,6 @@ const SidebarContent = ({
               <div>&copy; {new Date().getFullYear()} | All rights reserved</div>
             </div>
           )}
-          
-          <div className="mt-4 text-center">
-            {!isMobile && (
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={toggleSidebar}
-                className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                {isOpen ? (
-                  <ChevronLeft className="h-4 w-4" />
-                ) : (
-                  <ChevronRight className="h-4 w-4" />
-                )}
-                <span className="sr-only">Toggle sidebar</span>
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </aside>

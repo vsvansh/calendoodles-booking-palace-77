@@ -1,69 +1,57 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import AppLayout from "./components/layout/AppLayout";
-import Index from "./pages/Index";
-import Calendar from "./pages/Calendar";
-import Appointments from "./pages/Appointments";
-import Services from "./pages/Services";
-import Clients from "./pages/Clients";
-import Payments from "./pages/Payments";
-import Analytics from "./pages/Analytics";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
-import ChatbotDrawer from "./components/chat/ChatbotDrawer";
-import ContactUs from "./pages/ContactUs";
-import PrivacyPolicy from "./pages/policies/PrivacyPolicy";
-import TermsOfService from "./pages/policies/TermsOfService";
-import CookiePolicy from "./pages/policies/CookiePolicy";
-import Compliance from "./pages/policies/Compliance";
+import { useState, useEffect } from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-const queryClient = new QueryClient();
+import AppLayout from "@/components/layout/AppLayout";
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Auth Routes with back buttons added via props */}
-          <Route path="/login" element={<Login showBackButton={true} />} />
-          <Route path="/register" element={<Register showBackButton={true} />} />
-          
-          {/* App Routes */}
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/clients" element={<Clients />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            
-            {/* Policy Pages */}
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/cookie-policy" element={<CookiePolicy />} />
-            <Route path="/compliance" element={<Compliance />} />
-          </Route>
-          
-          {/* Catch-all Route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ChatbotDrawer />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+// Pages
+import Index from "@/pages/Index";
+import Calendar from "@/pages/Calendar";
+import Appointments from "@/pages/Appointments";
+import Services from "@/pages/Services";
+import Clients from "@/pages/Clients";
+import Payments from "@/pages/Payments";
+import Analytics from "@/pages/Analytics";
+import Profile from "@/pages/Profile";
+import Settings from "@/pages/Settings";
+import ContactUs from "@/pages/ContactUs";
+
+// Policy Pages
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
+import CookiePolicy from "@/pages/CookiePolicy";
+import Compliance from "@/pages/Compliance";
+
+const App = () => {
+  // Set default theme as light mode
+  useEffect(() => {
+    // Check for saved theme preference or use light as default
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Index />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
+          <Route path="/compliance" element={<Compliance />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default App;

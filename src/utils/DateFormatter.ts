@@ -25,6 +25,15 @@ export const formatDateInput = (input: string): string => {
       }
     }
     
+    // Automatically format as user types
+    if (digits.length === 4 && !input.includes('-')) {
+      // Add "-" after day and month
+      result = digits.substring(0, 2) + '-' + digits.substring(2, 4);
+    } else if (digits.length >= 6 && !input.includes('-')) {
+      // Add "-" after day and month in longer input
+      result = digits.substring(0, 2) + '-' + digits.substring(2, 4) + '-' + digits.substring(4);
+    }
+    
     return result;
   }
   
