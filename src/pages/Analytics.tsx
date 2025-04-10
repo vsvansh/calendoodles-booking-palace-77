@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight } from 'lucide-react';
+import { Activity, BarChart3, LineChart as LineChartIcon, ChevronRight, Calendar as CalendarIcon, Users } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import AnalyticsChartCard from '@/components/analytics/AnalyticsChartCard';
 
-// Sample data for analytics
 const revenueData = {
   weekly: [
     { day: 'Mon', revenue: 400 },
@@ -149,7 +148,6 @@ const Analytics = () => {
         </p>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-2 border-calendoodle-blue/20 shadow-md hover:shadow-lg transition-all duration-300 dark:shadow-glow-blue bg-white/80 backdrop-blur-sm dark:bg-gray-800/60 transform hover:translate-y-[-4px]">
           <CardContent className="p-6">
@@ -175,7 +173,7 @@ const Analytics = () => {
                 <p className="text-xs text-green-600 dark:text-green-400 mt-1">+12.5% from last month</p>
               </div>
               <div className="p-3 rounded-full bg-calendoodle-purple/10 text-calendoodle-purple">
-                <Calendar className="h-5 w-5" />
+                <CalendarIcon className="h-5 w-5" />
               </div>
             </div>
           </CardContent>
@@ -212,7 +210,6 @@ const Analytics = () => {
         </Card>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AnalyticsChartCard
           title="Revenue"
@@ -244,7 +241,6 @@ const Analytics = () => {
         />
       </div>
 
-      {/* Recent Activity */}
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
