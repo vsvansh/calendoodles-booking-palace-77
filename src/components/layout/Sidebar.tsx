@@ -191,7 +191,6 @@ const NavItem = ({ item, isOpen }: { item: any; isOpen: boolean }) => {
           isOpen ? "justify-start" : "justify-center"
         )
       }
-      onClick={() => window.scrollTo(0, 0)}
     >
       <span className={cn(
         "transition-all duration-300 transform group-hover:scale-110 group-hover:-rotate-3",

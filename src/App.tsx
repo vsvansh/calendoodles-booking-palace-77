@@ -15,6 +15,8 @@ import Analytics from "@/pages/Analytics";
 import Profile from "@/pages/Profile";
 import Settings from "@/pages/Settings";
 import ContactUs from "@/pages/ContactUs";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
 
 // Policy Pages
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -49,6 +51,9 @@ const App = () => {
           <Route path="/cookie-policy" element={<CookiePolicy />} />
           <Route path="/compliance" element={<Compliance />} />
         </Route>
+        {/* Add standalone routes for login and register */}
+        <Route path="/login" element={<Login showBackButton={true} />} />
+        <Route path="/register" element={<Register showBackButton={true} />} />
       </Routes>
     </BrowserRouter>
   );
