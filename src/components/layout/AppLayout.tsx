@@ -74,7 +74,9 @@ const AppLayout = () => {
           }`}
         >
           <div 
-            className={`flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full ${fadeIn ? 'animate-fade-in opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+            className={`flex-grow p-4 sm:p-6 max-w-[1800px] mx-auto w-full transition-opacity duration-300 ${
+              fadeIn ? 'animate-fadeIn opacity-100' : 'opacity-0'
+            }`}
           >
             <Outlet />
           </div>

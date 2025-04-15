@@ -78,3 +78,13 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Add smooth transitions globally */
+a, button, .transition-element {
+  @apply transition-all duration-300;
+}
+
+/* MacOS-like hover effect for buttons */
+.macos-hover {
+  @apply transition-all duration-300 transform hover:scale-105 hover:-rotate-1 hover:shadow-md;
+}

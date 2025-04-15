@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,13 +19,31 @@ const Register = ({ showBackButton = false }: RegisterProps) => {
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form
+    if (!name || !email || !password || !agreeTerms) {
+      toast({
+        title: "Error",
+        description: "Please fill all fields and agree to terms",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Success toast
     toast({
       title: "Account created!",
       description: "Welcome to Calendoodles!",
     });
+    
+    // Redirect to dashboard after successful registration
+    setTimeout(() => {
+      navigate('/');
+    }, 1500);
   };
 
   return (
