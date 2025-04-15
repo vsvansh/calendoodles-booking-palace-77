@@ -20,6 +20,8 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
           if (React.isValidElement(child)) {
             // Create a properly typed clone with merged className
             return React.cloneElement(child, {
+              // Correctly type the props to include className
+              ...child.props,
               className: cn(
                 child.props.className,
                 "rounded-none border-none first:rounded-l-md last:rounded-r-md -ml-[1px] first:ml-0"
