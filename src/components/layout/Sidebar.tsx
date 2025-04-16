@@ -100,7 +100,7 @@ const SidebarContent = ({
         
         <div className="mt-6 border-t border-gray-200 dark:border-gray-800 pt-6 text-xs text-muted-foreground">
           {isOpen && <div className="text-center text-gray-500 dark:text-gray-400 text-xs pt-2">
-              <div className="mb-1">Calendoodles v1.0.0 | Amulya</div>
+              <div className="mb-1">Calendoodles v1.0.0 | By Vijay </div>
               <div>&copy; {new Date().getFullYear()} | All rights reserved</div>
             </div>}
         </div>
